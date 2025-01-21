@@ -2,6 +2,9 @@
   "name": "mule-migration-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "20.16.0"
+  },
   "dependencies": {
     "cra-template": "1.2.0",
     "react": "^18.0.0",
