@@ -1,37 +1,29 @@
-// App.js
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState } from "react";
+import FileUpload from "./components/file-upload/file-upload.component";
 
 function App() {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [newUserInfo, setNewUserInfo] = useState({
+    profileImages: []
+  });
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  const updateUploadedFiles = (files) =>
+    setNewUserInfo({ ...newUserInfo, profileImages: files });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    if (selectedFile) {
-      // Handle the uploaded file here
-      console.log(selectedFile); 
-      // You can send the file to a server for processing, 
-      // extract information from the JAR file, 
-      // or perform other actions.
-    }
+    //logic to create new user...
   };
 
   return (
-    <div className="App">
-    <h1>Hello Anuja!</h1>
-      <h1>JAR File Uploader</h1>
+    <div>
       <form onSubmit={handleSubmit}>
-        <input 
-          type="file" 
-          accept=".jar" 
-          onChange={handleFileChange} 
+        <FileUpload
+          accept=".jpg,.png,.jpeg"
+          label="Profile Image(s)"
+          multiple
+          updateFilesCb={updateUploadedFiles}
         />
-        <button type="submit">Upload</button>
+        <button type="submit">Create New User</button>
       </form>
     </div>
   );
