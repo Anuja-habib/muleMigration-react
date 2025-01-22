@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FileUpload from "./components/file-upload/file-upload.component";
+import ColorSchemesExample from "./components/nav/nav"
 
 function App() {
   const [newUserInfo, setNewUserInfo] = useState({
@@ -15,15 +16,18 @@ function App() {
   };
 
   return (
+  
+    
     <div>
+      <ColorSchemesExample></ColorSchemesExample>
       <form onSubmit={handleSubmit}>
         <FileUpload
-          accept=".jpg,.png,.jpeg"
-          label="Profile Image(s)"
+          accept=".jpg,.png,.jpeg,jar"
+
           multiple
           updateFilesCb={updateUploadedFiles}
         />
-        <button type="submit">Create New User</button>
+
       </form>
     </div>
   );
