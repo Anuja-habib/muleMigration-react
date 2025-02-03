@@ -3,18 +3,21 @@ import './/file-upload.component.css';
 
 function FileUpload() {
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [uploadSuccessful, setUploadSuccessful] = useState(false); 
+  const [uploadError, setUploadError] = useState(null);   
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
+    setUploadSuccessful(false); // Reset success message on new file selection
+    setUploadError(null);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    console.log('event',selectedFile)
     if (selectedFile) {
       const formData = new FormData();
       formData.append('file', selectedFile);
-
+      console.log('event',selectedFile)
       try {
         const response = await fetch('/upload', { 
           method: 'POST', 
@@ -25,11 +28,16 @@ function FileUpload() {
           throw new Error('Network response was not ok');
         }
 
-        const data = await response.json(); 
-        console.log('File uploaded successfully:', data);
-
-      } catch (error) {
-        console.error('Error uploading file:', error);
+        const data = await response.json();
+      console.log('File uploaded successfully:', data);
+      setSelectedFile(null); // Clear the selected file from state
+      event.target.reset();   // Clear the file input field
+      setUploadSuccessful(true); // Set the success message
+      setUploadError(null);       // Clear any previous error
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setUploadError(error.message); // Set the error message for display
+      setUploadSuccessful(false);  
       }
     }
   };
@@ -40,7 +48,7 @@ function FileUpload() {
       <div className="cloud-icon">
       <label className='drag-drop-text'> Drag the file here</label>
     <form onSubmit={handleSubmit}>
-      <input className='dummy'
+      <input 
         label ="Drag or select the file"
         type="file" 
         onChange={handleFileChange} 
