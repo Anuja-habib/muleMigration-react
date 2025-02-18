@@ -1,46 +1,48 @@
 // Filename - components/SidebarData.js
 
 import React from "react";
+import styled from "styled-components"
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/tb";
 import * as IoIcons from "react-icons/io";
 import * as RiIcons from "react-icons/ri";
 import * as Convert from "react-icons/si";
 import { RiAiGenerate } from "react-icons/ri";
+const ReactIcons ={ color: '#1b4965'}
 
 export const SidebarData = [
     {
         title: "RAML Tools",
-        path: "/ramlTools",
-        icon: <FaIcons.FaTools />,
-        iconClosed: <RiIcons.RiArrowDownSFill />,
-        iconOpened: <RiIcons.RiArrowUpSFill />,
+        path: "/raml-tools",
+        icon: <FaIcons.FaTools style={ReactIcons}/>,
+        iconClosed: <RiIcons.RiArrowDownSFill  style={ReactIcons}/>,
+        iconOpened: <RiIcons.RiArrowUpSFill style={ReactIcons}/>,
 
         subNav: [
             {
                 title: "XSD To RAML Converter",
-                path: "/ramlTools/xsdToRaml",
-                icon: <Convert.SiConvertio />,
+                path: "/raml-tools/xsd-to-raml",
+                icon: <Convert.SiConvertio style={ReactIcons}/>,
             },
             {
                 title: "WSDL to RAML Generator",
-                path: "/ramlTools/wsdlToRaml",
-                icon: <RiAiGenerate />,
+                path: "/raml-tools/wsdl-to-raml",
+                icon: <RiAiGenerate style={ReactIcons}/>,
             },
         ],
     },
     {
         title: "Mapping Tools",
-        path: "/mappingTools",
-        icon: <IoIcons.IoIosPaper />,
-        iconClosed: <RiIcons.RiArrowDownSFill />,
-        iconOpened: <RiIcons.RiArrowUpSFill />,
+        path: "/mapping-tools",
+        icon: <IoIcons.IoIosPaper style={ReactIcons}/>,
+        iconClosed: <RiIcons.RiArrowDownSFill style={ReactIcons}/>,
+        iconOpened: <RiIcons.RiArrowUpSFill style={ReactIcons}/>,
 
         subNav: [
             {
                 title: "XSLT Mapping Extractor",
-                path: "/mappingTools/xsltMappingExtractor",
-                icon: <IoIcons.IoIosPaper />,
+                path: "/mapping-tools/xslt-mapping-extractor",
+                icon: <IoIcons.IoIosPaper style={ReactIcons}/>,
                 cName: "sub-nav",
             }
             // },
@@ -59,17 +61,17 @@ export const SidebarData = [
     },
     {
         title: "Integration Tools",
-        path: "/integrationTools",
-        icon: <FaIcons.FaEnvelopeOpenText />,
+        path: "/integration-tools",
+        icon: <FaIcons.FaEnvelopeOpenText style={ReactIcons}/>,
 
-        iconClosed: <RiIcons.RiArrowDownSFill />,
-        iconOpened: <RiIcons.RiArrowUpSFill />,
+        iconClosed: <RiIcons.RiArrowDownSFill style={ReactIcons}/>,
+        iconOpened: <RiIcons.RiArrowUpSFill style={ReactIcons}/>,
 
         subNav: [
             {
                 title: "Tibco Integration Catalog",
-                path: "/integrationTools/Tibco",
-                icon: <IoIcons.IoIosPaper />,
+                path: "/integration-tools/tibco",
+                icon: <IoIcons.IoIosPaper style={ReactIcons}/>,
             }// },
             // {
             //     title: "Event 2",
@@ -81,6 +83,6 @@ export const SidebarData = [
     {
         title: "Support",
         path: "/support",
-        icon: <IoIcons.IoMdHelpCircle />,
+        icon: <IoIcons.IoMdHelpCircle style={ReactIcons}/>,
     },
 ];

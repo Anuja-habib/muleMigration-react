@@ -4,20 +4,17 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: Arial
 }
-.home,
-.services,
-.reports,
-.contact,
-.events,
-.support {
-  display: flex;
-  margin-left: 260px;
-  font-size: 2rem;
-}
+
 
 .logoImg{
   width: 15%;
   height: 150%;
   margin-left: 35%;
+  align-items: center;
+}
+
+#menuIcon{
+  color: black;
 }

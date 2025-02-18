@@ -9,32 +9,33 @@ import { SidebarData } from "./SidebarData";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 import logo from '../assets/pngegg.png';
+import '../App.css';
 const Nav = styled.div`
     border-bottom-left-radius: 50px 20px;
     border-bottom-right-radius: 50px 20px;
-    background: #e0e0e0;
-    box-shadow: inset 6px 6px 12px #aaaaaa,
-                inset -6px -6px 12px #ffffff;
-    height: 80px;
+    height: 100px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    
+
+    background:  #1b4965;
 `;
 
 const NavIcon = styled(Link)`
     margin-left: 2rem;
     font-size: 2rem;
-    height: 5px;
-    display: block;
+    height: 70px;
+    display: flex;
     justify-content: flex-start;
     align-items: center;
+
 `;
 
 const SidebarNav = styled.nav`
-    background:rgb(255, 255, 255);
+    top: 0;
+    font-size: 1.5rem;
     width: 250px;
-    height: 50vh;
+    height: 70vh;
     display: flex;
     justify-content: center;
     position: fixed;
@@ -42,9 +43,11 @@ const SidebarNav = styled.nav`
     left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
     transition: 350ms;
     z-index: 10;
-    background: #e0e0e0;
-    box-shadow: inset 6px 6px 12px #aaaaaa,
-                inset -6px -6px 12px #ffffff;
+    background:rgb(242, 242, 242);
+
+
+        box-shadow:  10px 10px 40px #518fb3,
+                    -10px -10px 40px #6dc1f3;
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
     
@@ -63,12 +66,12 @@ const Sidebar = () => {
         <>
             <IconContext.Provider value={{ color: "#fff" }}>
                 <Nav>
-                    <NavIcon to="#">
-                        <FaIcons.FaBars 
+                <NavIcon  to="#">
+                        <FaIcons.FaBars  
                             onClick={showSidebar}
                         />
-                    </NavIcon>
-                    <img width="10%"
+                </NavIcon>
+                <img width="10%"
                 height="100%" className="logoImg" src={logo} alt="Your Logo" />
                 </Nav>
                 <SidebarNav sidebar={!sidebar}>
@@ -92,5 +95,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-

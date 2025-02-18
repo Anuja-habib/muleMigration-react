@@ -25,27 +25,28 @@ import {
 import Support from "./pages/Support";
 function App() {
     return (
+        <div className="app-container">
         <Router>
             <Sidebar />
             <Routes>
                 <Route
-                    path="/ramlTools"
+                    path="/raml-tools"
                     element={<AboutUs />}
                 />
                 <Route
-                    path="/ramlTools/xsdToRaml"
+                    path="/raml-tools/xsd-to-raml"
                     element={<XsdToRaml />}
                 />
                 <Route
-                    path="/ramlTools/wsdlToRaml"
+                    path="/raml-tools/wsdl-to-raml"
                     element={<WsdlToRaml />}
                 />
                 <Route
-                    path="/mappingTools"
+                    path="/mapping-tools"
                     element={<Services />}
                 />
                 <Route
-                    path="/mappingTools/xsltMappingExtractor"
+                    path="/mapping-tools/xslt-mapping-extractor"
                     element={<XsltMappingExtractor />}
                 />
                 {/* <Route
@@ -61,11 +62,11 @@ function App() {
                     element={<Contact />}
                 /> */}
                 <Route
-                    path="/integrationTools"
+                    path="/integration-tools"
                     element={<IntegrationTools />}
                 />
                 <Route
-                    path="/integrationTools/Tibco"
+                    path="/integration-tools/tibco"
                     element={<TibcoIntegrationTools />}
                 />
                 <Route
@@ -78,6 +79,7 @@ function App() {
                 />
             </Routes>
         </Router>
+        </div>
     );
 }
 

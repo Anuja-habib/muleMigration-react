@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 const SidebarLink = styled(Link)`
     display: flex;
-    color: rgb(254, 254, 255);
+    color: rgb(0, 0, 0);
     justify-content: space-between;
     align-items: center;
     padding: 20px;
@@ -14,15 +14,14 @@ const SidebarLink = styled(Link)`
     height: 60px;
     text-decoration: none;
     font-size: 18px;
-
+    top: 0;
     &:hover {
-        border-radius: 30px;
-        background: #e0e0e0;
-        box-shadow: inset 6px 6px 12px #aaaaaa,
-                    inset -6px -6px 12px #ffffff;
-
+  
+        background: linear-gradient(145deg, #66b4e2, #5697be);
+        box-shadow:  20px 20px 60px #518fb3,
+                    -20px -20px 60px #6dc1f3;
         cursor: pointer;
-        color: #252831;
+        color: #1b4965;
         
     }
 `;
@@ -32,26 +31,26 @@ const SidebarLabel = styled.span`
 `;
 
 const DropdownLink = styled(Link)`
-    background: rgb(207, 208, 208);
-    box-shadow: inset 6px 6px 12px #aaaaaa,
-                    inset -6px -6px 12px #ffffff;
-    border-radius: 30px;
-    height: 60px;
-    padding-left: 3rem;
     display: flex;
+    color: rgb(0, 0, 0);
+    justify-content: space-between;
     align-items: center;
+    padding: 20px;
+    list-style: none;
+    height: 60px;
     text-decoration: none;
-    color:rgb(255, 255, 255);
     font-size: 18px;
+    margin-left: 20px;
+    
 
     &:hover {
-        border-radius: 30px;
-        background: #e0e0e0;
-        box-shadow: inset 6px 6px 12px #aaaaaa,
-                    inset -6px -6px 12px #ffffff;
+        border-left-right-radius: 0px 50px;
+        background: linear-gradient(145deg, #66b4e2, #5697be);
+        box-shadow:  20px 20px 60px #518fb3,
+                    -20px -20px 60px #6dc1f3;
 
         cursor: pointer;
-        color: #252831;
+        color: #1b4965;
     }
 `;
 
