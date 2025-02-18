@@ -10,33 +10,44 @@ import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 import logo from '../assets/pngegg.png';
 const Nav = styled.div`
-    background: #15171c;
+    border-bottom-left-radius: 50px 20px;
+    border-bottom-right-radius: 50px 20px;
+    background: #e0e0e0;
+    box-shadow: inset 6px 6px 12px #aaaaaa,
+                inset -6px -6px 12px #ffffff;
     height: 80px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    
 `;
 
 const NavIcon = styled(Link)`
     margin-left: 2rem;
     font-size: 2rem;
-    height: 80px;
-    display: flex;
+    height: 5px;
+    display: block;
     justify-content: flex-start;
     align-items: center;
 `;
 
 const SidebarNav = styled.nav`
-    background: #15171c;
+    background:rgb(255, 255, 255);
     width: 250px;
-    height: 100vh;
+    height: 50vh;
     display: flex;
     justify-content: center;
     position: fixed;
-    top: 10;
+    top: 20%;
     left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
     transition: 350ms;
     z-index: 10;
+    background: #e0e0e0;
+    box-shadow: inset 6px 6px 12px #aaaaaa,
+                inset -6px -6px 12px #ffffff;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    
 `;
 
 const SidebarWrap = styled.div`
@@ -52,7 +63,12 @@ const Sidebar = () => {
         <>
             <IconContext.Provider value={{ color: "#fff" }}>
                 <Nav>
-                <img width="10%"
+                    <NavIcon to="#">
+                        <FaIcons.FaBars 
+                            onClick={showSidebar}
+                        />
+                    </NavIcon>
+                    <img width="10%"
                 height="100%" className="logoImg" src={logo} alt="Your Logo" />
                 </Nav>
                 <SidebarNav sidebar={!sidebar}>
@@ -76,3 +92,5 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+

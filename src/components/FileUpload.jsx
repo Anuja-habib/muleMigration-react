@@ -2,13 +2,17 @@ import { useState, useRef } from 'react';
 import styled from 'styled-components';
 
 const FileUploadContainer = styled.div`
-  border: 2px dashed #ccc;
-  border-radius: 20px;
-  padding: 20px;
+;
+
+  padding: 20%;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer; /* Make the whole area clickable */
+  border-radius: 21px;
+  background: #e0e0e0;
+  box-shadow:  40px -40px 80px #9b9b9b,
+              -40px 40px 80px #ffffff;
 `;
 
 const DropZone = styled.div`
@@ -18,19 +22,25 @@ const DropZone = styled.div`
   align-items: center;
   padding: 20px;
   width: 100%; /* Ensure dropzone takes full width */
+  color:rgb(255, 255, 255);
+  
 `;
 
 const UploadButton = styled.button`
   margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #4CAF50;
+  padding: 20px 30px;
+  border-radius: 21px;
+  background: linear-gradient(145deg,rgb(192, 207, 232),rgb(178, 200, 235));
+  box-shadow:  8px 8px 51pxrgb(145, 170, 212),
+              -8px -8px 51px #7cbeff;
   color: white;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
 
   &:hover {
-    background-color: #45a049;
+   border-radius: 21px;
+  background: linear-gradient(145deg,rgb(142, 174, 225), #669bf3);
+  box-shadow:  18px 18px 51pxrgb(176, 196, 231),
+              -18px -18px 51px #7cbeff;
   }
 `;
 
