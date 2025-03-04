@@ -1,6 +1,6 @@
 // Filename - components/Sidebar.js
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
@@ -9,16 +9,16 @@ import { SidebarData } from "./SidebarData";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 import logo from '../assets/pngegg.png';
+
 import '../App.css';
 const Nav = styled.div`
-    border-bottom-left-radius: 50px 20px;
-    border-bottom-right-radius: 50px 20px;
+    
     height: 100px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
-
-    background:  #1b4965;
+    background:rgb(255, 255, 255)
+   
 `;
 
 const NavIcon = styled(Link)`
@@ -46,50 +46,65 @@ const SidebarNav = styled.nav`
     background:rgb(242, 242, 242);
 
 
-        box-shadow:  10px 10px 40px #518fb3,
+    box-shadow:  10px 10px 40px #518fb3,
                     -10px -10px 40px #6dc1f3;
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
+    
     
 `;
 
 const SidebarWrap = styled.div`
     width: 100%;
 `;
-
+const link = '/'
 const Sidebar = () => {
-    const [sidebar, setSidebar] = useState(false);
+    const [sidebar, setSidebar] = useState(true);
+    const sidebarRef = useRef(null);
 
     const showSidebar = () => setSidebar(!sidebar);
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (sidebar && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+                setSidebar(false); // Close sidebar if clicked outside
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside); // Use mousedown for better click detection
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside); // Clean up event listener
+        };
+    }, [sidebar]);
+
     return (
         <>
-            <IconContext.Provider value={{ color: "#fff" }}>
+            <IconContext.Provider value={{ color: "#1e98f3" }}>
                 <Nav>
-                <NavIcon  to="#">
-                        <FaIcons.FaBars  
-                            onClick={showSidebar}
-                        />
-                </NavIcon>
-                <img width="10%"
-                height="100%" className="logoImg" src={logo} alt="Your Logo" />
+                    <NavIcon to="#">
+                        <FaIcons.FaBars onClick={showSidebar} />
+                    </NavIcon>
+
+                <div className="logoImgDiv">
+                    <Link to={link} style={{ textDecoration: 'none' }}>
+                    <img className="logoImg" src={logo} alt="Your Logo" />
+                    </Link>
+                </div>    
+                    
                 </Nav>
-                <SidebarNav sidebar={!sidebar}>
+                <hr></hr>
+                <SidebarNav sidebar={sidebar} ref={sidebarRef}> {/* Add ref here */}
                     <SidebarWrap>
-                        <NavIcon to="#">
-                            
-                        </NavIcon>
-                        {SidebarData.map((item, index) => {
-                            return (
-                                <SubMenu
-                                    item={item}
-                                    key={index}
-                                />
-                            );
-                        })}
+                        <NavIcon to="#"> </NavIcon>
+                        {SidebarData.map((item, index) => (
+                            <SubMenu item={item} key={index} />
+                        ))}
                     </SidebarWrap>
                 </SidebarNav>
             </IconContext.Provider>
+
+
         </>
     );
 };

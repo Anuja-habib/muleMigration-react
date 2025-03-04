@@ -9,10 +9,14 @@
 
 
 .logoImg{
-  width: 15%;
-  height: 150%;
-  margin-left: 35%;
-  align-items: center;
+  top: 0%;
+  width: 20%;
+
+
+} 
+.logoImgDiv{
+position: absolute;
+left: 40%;
 }
 
 #menuIcon{

@@ -7,10 +7,18 @@ import * as AiIcons from "react-icons/tb";
 import * as IoIcons from "react-icons/io";
 import * as RiIcons from "react-icons/ri";
 import * as Convert from "react-icons/si";
+import { FaHome } from "react-icons/fa";
+import { VscDashboard } from "react-icons/vsc";
 import { RiAiGenerate } from "react-icons/ri";
 const ReactIcons ={ color: '#1b4965'}
 
 export const SidebarData = [
+    {
+        title: "Home",
+        path: "/",
+        icon: <FaHome style={ReactIcons}/>,
+
+    },
     {
         title: "RAML Tools",
         path: "/raml-tools",
@@ -22,6 +30,12 @@ export const SidebarData = [
             {
                 title: "XSD To RAML Converter",
                 path: "/raml-tools/xsd-to-raml",
+                icon: <Convert.SiConvertio style={ReactIcons}/>,
+            },
+            
+            {
+                title: "RAML Example Generator",
+                path: "/raml-tools/example-generator",
                 icon: <Convert.SiConvertio style={ReactIcons}/>,
             },
             {
@@ -60,8 +74,8 @@ export const SidebarData = [
         ],
     },
     {
-        title: "Integration Tools",
-        path: "/integration-tools",
+        title: "Migration Tools",
+        path: "/migration-tools",
         icon: <FaIcons.FaEnvelopeOpenText style={ReactIcons}/>,
 
         iconClosed: <RiIcons.RiArrowDownSFill style={ReactIcons}/>,
@@ -69,9 +83,9 @@ export const SidebarData = [
 
         subNav: [
             {
-                title: "Tibco Integration Catalog",
-                path: "/integration-tools/tibco",
-                icon: <IoIcons.IoIosPaper style={ReactIcons}/>,
+                title: "Tibco Migration Dashboard",
+                path: "/migration-tools/tibco",
+                icon: <VscDashboard style={ReactIcons}/>,
             }// },
             // {
             //     title: "Event 2",
@@ -81,8 +95,8 @@ export const SidebarData = [
         ],
     },
     {
-        title: "Support",
-        path: "/support",
+        title: "Generate",
+        path: "/generate",
         icon: <IoIcons.IoMdHelpCircle style={ReactIcons}/>,
     },
 ];

@@ -1,28 +1,30 @@
 
 
 import React from "react";
-import FileUpload from "../components/FileUpload";
-export const AboutUs = () => {
+ import ExampleGeneratorTool from "./exampleGenerator"
+ import TibcoConverter from "./TibcoParser"
+export const RamlExampleGenarator = () => {
     return (
         <div className="home">
-            <h1>Mulesoft Migration Accelerator Raml Tools</h1>
+            <ExampleGeneratorTool/>
             
         </div>
     );
 };
 
-export const XsdToRaml = () => {
-    return (
-        <div className="home">
-            <FileUpload></FileUpload>
-        </div>
-    );
-};
 
 export const WsdlToRaml = () => {
     return (
         <div className="home">
-            <h1>Mulesoft Migration Accelerator Wsdl To Raml</h1>
+            <TibcoConverter />
         </div>
     );
 };
+export const RamlTools = () => {
+    return (
+        <div className="home">
+            <h1>Mulesoft Migration Accelerator RAML Tools</h1>
+        </div>
+    );
+};
+

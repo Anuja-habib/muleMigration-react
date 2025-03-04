@@ -8,10 +8,12 @@ import {
     Route,
 } from "react-router-dom";
 import {
-    AboutUs,
-    XsdToRaml,
+    RamlExampleGenarator,
     WsdlToRaml,
+    RamlTools,
 } from "./pages/RamlTools";
+import  XsdToRaml 
+from "./pages/XsdToRaml";
 import {
     Services,
     XsltMappingExtractor,
@@ -22,7 +24,9 @@ import {
     TibcoIntegrationTools,
     EventsTwo,
 } from "./pages/IntegrationTools";
-import Support from "./pages/Support";
+import Home from "./pages/home"
+import Generate from "./pages/Genarate";
+import Footer from './components/Footer'
 function App() {
     return (
         <div className="app-container">
@@ -30,8 +34,16 @@ function App() {
             <Sidebar />
             <Routes>
                 <Route
+                    path="/"
+                    element={<Home />}
+                />
+                <Route
                     path="/raml-tools"
-                    element={<AboutUs />}
+                    element={<RamlTools />}
+                />
+                <Route
+                    path="/raml-tools/example-generator"
+                    element={<RamlExampleGenarator />}
                 />
                 <Route
                     path="/raml-tools/xsd-to-raml"
@@ -62,11 +74,11 @@ function App() {
                     element={<Contact />}
                 /> */}
                 <Route
-                    path="/integration-tools"
+                    path="/migration-tools"
                     element={<IntegrationTools />}
                 />
                 <Route
-                    path="/integration-tools/tibco"
+                    path="/migration-tools/tibco"
                     element={<TibcoIntegrationTools />}
                 />
                 <Route
@@ -74,11 +86,15 @@ function App() {
                     element={<EventsTwo />}
                 />
                 <Route
-                    path="/support"
-                    element={<Support />}
+                    path="/generate"
+                    element={<Generate />}
                 />
             </Routes>
+       
+         
+           
         </Router>
+       
         </div>
     );
 }
