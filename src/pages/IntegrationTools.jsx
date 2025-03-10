@@ -1,7 +1,7 @@
 // Filename - pages/Events.js
 
 import React from "react";
-
+ import TibcoConverter from "./TibcoParser"
 export const IntegrationTools = () => {
     return (
         <div className="events">
@@ -13,7 +13,7 @@ export const IntegrationTools = () => {
 export const TibcoIntegrationTools = () => {
     return (
         <div className="events">
-            <h1>Mulesoft Migration Accelerator Tibco Integration Tools</h1>
+             <TibcoConverter />
         </div>
     );
 };

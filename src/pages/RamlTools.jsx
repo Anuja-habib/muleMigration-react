@@ -2,7 +2,7 @@
 
 import React from "react";
  import ExampleGeneratorTool from "./exampleGenerator"
- import TibcoConverter from "./TibcoParser"
+
 export const RamlExampleGenarator = () => {
     return (
         <div className="home">
@@ -16,14 +16,14 @@ export const RamlExampleGenarator = () => {
 export const WsdlToRaml = () => {
     return (
         <div className="home">
-            <TibcoConverter />
+           <h1>WSDL to RAML</h1>
         </div>
     );
 };
 export const RamlTools = () => {
     return (
         <div className="home">
-            <h1>Mulesoft Migration Accelerator RAML Tools</h1>
+           <h1>XsdToRaml</h1>
         </div>
     );
 };

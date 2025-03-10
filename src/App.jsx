@@ -9,7 +9,6 @@ import {
 } from "react-router-dom";
 import {
     RamlExampleGenarator,
-    WsdlToRaml,
     RamlTools,
 } from "./pages/RamlTools";
 import  XsdToRaml 
@@ -24,6 +23,7 @@ import {
     TibcoIntegrationTools,
     EventsTwo,
 } from "./pages/IntegrationTools";
+import WsdlToRaml from "./pages/wsdlToRaml"
 import Home from "./pages/home"
 import Generate from "./pages/Genarate";
 import Footer from './components/Footer'

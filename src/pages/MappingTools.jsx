@@ -9,6 +9,7 @@ import { RiAiGenerate } from "react-icons/ri";
 import { TbTools } from "react-icons/tb";
 import { GiProcessor } from "react-icons/gi";
 import { VscServerProcess } from "react-icons/vsc";
+import Parent from '../components/FileExplorer'
 const ReactIcons ={ color: '#1b4965'}
 
 import Card from 'react-bootstrap/Card';
@@ -75,21 +76,7 @@ export const Services = () => {
 export const XsltMappingExtractor = () => {
     return (
         <div className="services">
-             {mainMenu.map(title => (
-                <Card className="card-main-Container">
-                <div className="card-title">{title.Key}</div>
-                
-                
-                {
-                    title.Value.map((item,index)=> (
-                <MyCards key={index} CardContent={item}></MyCards>
-                    ))
-                }
-                
-                </Card>
-                
-            ))} 
-
+            
 
             
            
