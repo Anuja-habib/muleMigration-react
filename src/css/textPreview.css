@@ -1,4 +1,4 @@
-.responsePreview1{
+.responsePreview{
   width: 100%;
   height: 80%;
 max-width: 100%; /* Adjust as needed */
@@ -106,3 +106,15 @@ margin: 2px;
 background-color: #0056b3; /* Darker blue on hover */
 }
 
+/* In your FileViewer.css or global CSS */
+.file-viewer-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Allow scrolling if content exceeds container */
+}
+
+.file-viewer-content { /* Or whatever class your content uses */
+  width: 100%;
+  height: auto; /* Let content determine its height */
+  /* Add any other styles needed for your content */
+}

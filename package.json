@@ -2,7 +2,7 @@
   "name": "vite-project",
   "private": true,
   "version": "0.0.0",
-  "proxy": "http://127.0.0.1:5005/",
+  "proxy": "http://127.0.0.1:5000/",
   "type": "module",
   "scripts": {
     "start": "export HTTPS=true&&SSL_CRT_FILE=./cert.pem&&SSL_KEY_FILE=./key.pem react-scripts start",
@@ -16,6 +16,7 @@
     "@react-css/flex": "^2.3.0",
     "bootstrap": "^5.3.3",
     "flowbite-react": "^0.10.2",
+    "framer-motion": "^12.4.10",
     "install": "^0.13.0",
     "jszip": "^3.10.1",
     "mkcert": "^3.2.0",
@@ -28,9 +29,8 @@
     "react-icons": "^5.4.0",
     "react-loading": "^2.0.3",
     "react-loading-icons": "^1.1.0",
-    "react-loading-overlay": "^1.0.1",
     "react-router-dom": "^7.1.5",
-    "react-spinners": "^0.15.0",
+    "react-switch": "^7.1.0",
     "react-syntax-highlighter": "^15.6.1",
     "styled-components": "^6.1.15"
   },

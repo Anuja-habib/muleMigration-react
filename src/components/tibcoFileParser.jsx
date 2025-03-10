@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import config from '../config/config';
 const ZipUploader = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [apiResponse, setApiResponse] = useState(null);
@@ -20,7 +20,7 @@ const ZipUploader = () => {
     formData.append('file', selectedFile);
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/tibcoParser', {
+      const response = await fetch(config.apiUrlPython + '/tibcoParser', {
         method: 'POST',
         body: formData,
       });

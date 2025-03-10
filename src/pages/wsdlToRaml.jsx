@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import FileUpload from "../components/FileUpload";
 import FileViewer from "../components/FileViewer";
 import { FileExplorer } from "../components/FileExplorer";
-
+import Alert from 'react-bootstrap/Alert';
+import config from '../config/config';
 import {SmallBanner} from '../components/Banner'
-import { Oval } from  'react-loading-icons'
 const WsdlToRaml = () => {
-  let info = "Drag & and Drop the Wsdl file here"
-  let heading = "Welcome to WSDL to RAML Converter"
+  let title = 'WSDL to RAML Converter';
+  let subtitle ='To use the tool, simply upload your WSDL file and click the "Convert" button. The tool will then generate a RAML file that you can download and use to create APIs.';
   const [originalFileData, setOriginalFileData] = useState(null);
   const [uploadedFileData, setUploadedFileData] = useState(null);
   const [apiResponseData, setApiResponseData] = useState(null);
@@ -15,7 +15,7 @@ const WsdlToRaml = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [mainFolderName, setMainFolderName] = useState(null);
   const [apiEndpoint, setApiEndpoint] = useState(
-    "http://127.0.0.1:5000/wsdl-to-raml"
+    config.apiUrlPython +"/wsdl-to-raml"
   );
   const [uploadComplete, setUploadComplete] = useState(false);
   const [explorerWidth, setExplorerWidth] = useState(300);
@@ -87,7 +87,6 @@ const WsdlToRaml = () => {
 
   return (
     <div >
-      
       {uploadComplete ? (
         <div style={{ display: "flex", height: "100vh" }}>
           <div className="fileExplorer"
@@ -113,10 +112,9 @@ const WsdlToRaml = () => {
               onMouseDown={handleMouseDown}
             />
           </div>
-    
-          <div style={{ flex: 1, overflowX: "auto", display: "flex", padding: "1%" }}>
+          <div style={{ flex: 1, overflowX: "auto", display: "flex", flexDirection: "column" }}>
             <div ref={viewerRef} style={{ width: "100%", overflow: "hidden" }}>
-              <FileViewer 
+              <FileViewer
                 apiResponse={originalFileData}
                 error={error}
                 isLoading={isLoading}
@@ -124,17 +122,9 @@ const WsdlToRaml = () => {
             </div>
           </div>
         </div>
-      ) : isLoading ?(
-        <div className="overlay-loading">
-    <div className="loader">
-    <Oval stroke="#000000" />
-    </div>
-
-      </div>
-        ):(
+      ) : (
         <div>
-                          
-           <SmallBanner heading={heading} info={info}/>
+           <SmallBanner title={title} subtitle={subtitle}/>
           <FileUpload onFileUpload={handleFileUpload} />
          
         </div>

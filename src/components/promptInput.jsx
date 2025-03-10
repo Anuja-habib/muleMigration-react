@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import "../css/textPreview.css"
-
+import config from '../config/config';
 
 const InputComponent = ({ onPromptSubmit }) => {
   const [inputValue, setInputValue] = useState('');
@@ -14,7 +14,7 @@ const InputComponent = ({ onPromptSubmit }) => {
     event.preventDefault(); // Prevent default form submission
     onPromptSubmit(true);; // Reset the API response state
     try {
-      const response = await fetch('http://127.0.0.1:5000/generations', {
+      const response = await fetch(config.apiUrlPython + '/generations', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

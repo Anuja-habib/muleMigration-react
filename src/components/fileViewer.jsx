@@ -54,7 +54,7 @@ const FileViewer = ({ apiResponse, error, isLoading }) => {
     };
 
     return (
-        <div className="responsePreview" style={{ fontFamily: 'monospace', fontSize: '14px', maxHeight: '120%', overflowY: 'auto' }}> 
+        <div className="responsePreview" style={{ fontFamily: 'monospace', fontSize: '14px', maxHeight: '20%', overflowY: 'auto' }}> 
             {apiResponse ? (
                 <div>
                     <CopyToClipboard text={JSON.stringify(apiResponse, null, 2)} onCopy={() => setCopied(true)}>

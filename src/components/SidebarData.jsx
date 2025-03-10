@@ -1,102 +1,86 @@
 // Filename - components/SidebarData.js
 
 import React from "react";
-import styled from "styled-components"
 import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/tb";
 import * as IoIcons from "react-icons/io";
 import * as RiIcons from "react-icons/ri";
+import * as TbIcons from "react-icons/tb";
 import * as Convert from "react-icons/si";
-import { FaHome } from "react-icons/fa";
 import { VscDashboard } from "react-icons/vsc";
 import { RiAiGenerate } from "react-icons/ri";
-const ReactIcons ={ color: '#1b4965'}
+
+// For the blue color like in the MuleSoft interface
+const iconStyle = { color: '#009de2' };
 
 export const SidebarData = [
     {
-        title: "Home",
-        path: "/",
-        icon: <FaHome style={ReactIcons}/>,
-
-    },
-    {
-        title: "RAML Tools",
-        path: "/raml-tools",
-        icon: <FaIcons.FaTools style={ReactIcons}/>,
-        iconClosed: <RiIcons.RiArrowDownSFill  style={ReactIcons}/>,
-        iconOpened: <RiIcons.RiArrowUpSFill style={ReactIcons}/>,
-
-        subNav: [
+        title: "RAML TOOLS",
+        items: [
             {
                 title: "XSD To RAML Converter",
                 path: "/raml-tools/xsd-to-raml",
-                icon: <Convert.SiConvertio style={ReactIcons}/>,
+                icon: <Convert.SiConvertio style={iconStyle} />
             },
-            
             {
                 title: "RAML Example Generator",
                 path: "/raml-tools/example-generator",
-                icon: <Convert.SiConvertio style={ReactIcons}/>,
+                icon: <Convert.SiConvertio style={iconStyle} />
             },
             {
                 title: "WSDL to RAML Generator",
                 path: "/raml-tools/wsdl-to-raml",
-                icon: <RiAiGenerate style={ReactIcons}/>,
-            },
-        ],
+                icon: <RiAiGenerate style={iconStyle} />
+            }
+        ]
     },
     {
-        title: "Mapping Tools",
-        path: "/mapping-tools",
-        icon: <IoIcons.IoIosPaper style={ReactIcons}/>,
-        iconClosed: <RiIcons.RiArrowDownSFill style={ReactIcons}/>,
-        iconOpened: <RiIcons.RiArrowUpSFill style={ReactIcons}/>,
-
-        subNav: [
+        title: "MAPPING TOOLS",
+        items: [
             {
                 title: "XSLT Mapping Extractor",
                 path: "/mapping-tools/xslt-mapping-extractor",
-                icon: <IoIcons.IoIosPaper style={ReactIcons}/>,
-                cName: "sub-nav",
-            }
-            // },
-            // {
-            //     title: "Service 2",
-            //     path: "/services/services2",
-            //     icon: <IoIcons.IoIosPaper />,
-            //     cName: "sub-nav",
-            // },
-            // {
-            //     title: "Service 3",
-            //     path: "/services/services3",
-            //     icon: <IoIcons.IoIosPaper />,
-            // },
-        ],
-    },
-    {
-        title: "Migration Tools",
-        path: "/migration-tools",
-        icon: <FaIcons.FaEnvelopeOpenText style={ReactIcons}/>,
-
-        iconClosed: <RiIcons.RiArrowDownSFill style={ReactIcons}/>,
-        iconOpened: <RiIcons.RiArrowUpSFill style={ReactIcons}/>,
-
-        subNav: [
+                icon: <IoIcons.IoIosPaper style={iconStyle} />
+            },
             {
-                title: "Tibco Migration Dashboard",
-                path: "/migration-tools/tibco",
-                icon: <VscDashboard style={ReactIcons}/>,
-            }// },
-            // {
-            //     title: "Event 2",
-            //     path: "/events/events2",
-            //     icon: <IoIcons.IoIosPaper />,
-            // },
-        ],
+                title: "Dataweave Script Generator",
+                path: "/mapping-tools/dwl-generator",
+                icon: <IoIcons.IoIosPaper style={iconStyle} />
+            }
+        ]
     },
     {
-        title: "Generate",
-        path: "/generate",
-        icon: <IoIcons.IoMdHelpCircle style={ReactIcons}/>,
+        title: "MIGRATION TOOLS",
+        items: [
+            {
+                title: "TIBCO Migration Dashboard",
+                path: "/migration-tools/tibco",
+                icon: <VscDashboard style={iconStyle} />
+            },
+            {
+                title: "IIB Migration Dashboard",
+                path: "/migration-tools/iib",
+                icon: <VscDashboard style={iconStyle} />
+            }
+        ]
     },
+    {
+        title: "CODE ANALYSIS TOOLS",
+        items: [
+            {
+                title: "Code Quality Analysis",
+                path: "/generate",
+                icon: <IoIcons.IoMdHelpCircle style={iconStyle} />
+            }
+        ]
+    },
+    {
+        title: "UTILITIES",
+        items: [
+            {
+                title: "Generate",
+                path: "/generate",
+                icon: <IoIcons.IoMdHelpCircle style={iconStyle} />
+            }
+        ]
+    }
 ];

@@ -3,15 +3,17 @@ import FileUpload from '../components/FileUpload';
 import FileViewer from '../components/FileViewer';
 import { Flex, Item } from '@react-css/flex';
 import {SmallBanner} from '../components/Banner'
+import config from '../config/config';
 const XsdToRaml = () => {
+    let title = 'XSD to RAML Converter';
+    let subtitle = 'To use the tool, simply upload your XSD file and click the "Convert" button. The tool will then generate a RAML file that you can download and use to create APIs.';
     const [originalFileData, setOriginalFileData] = useState(null);
     const [apiResponseData, setApiResponseData] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [apiEndpoint, setApiEndpoint] = useState('http://127.0.0.1:5000/xsd-to-raml');
+
+    const [apiEndpoint, setApiEndpoint] = useState(config.apiUrlPython+ '/xsd-to-raml');
     const [uploadComplete, setUploadComplete] = useState(false); // New state variable
-    let info = "Drag & and Drop the XSD here"
-    let heading = "Welcome to XSD to RAML Converter"
 
     const handleFileUpload = (file, fileContent) => {
         setOriginalFileData({ result: fileContent, filename: file.name });
@@ -45,9 +47,8 @@ const XsdToRaml = () => {
     };
 
     return (
-        <div><SmallBanner heading={heading} info={info}/>
         <div className='row'>
-
+             <SmallBanner title={title} subtitle={subtitle}/>
             {uploadComplete ? (
                 <>
                     <div className='column'>
@@ -59,13 +60,12 @@ const XsdToRaml = () => {
                 </>
             ) : (
                 <>
-                    <div className='col'>
+                    <div className='c'>
                         <FileUpload onFileUpload={handleFileUpload} />
                     </div>
-                
+                    
                 </>
             )}
-        </div>
         </div>
     );
 };
