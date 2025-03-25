@@ -30,6 +30,11 @@ export const SidebarData = [
                 title: "WSDL to RAML Generator",
                 path: "/raml-tools/wsdl-to-raml",
                 icon: <RiAiGenerate style={iconStyle} />
+            },
+            {
+                title: "Standardize RAML Spec",
+                path: "/raml-tools/standardize-raml",
+                icon: <RiAiGenerate style={iconStyle} />
             }
         ]
     },
@@ -60,6 +65,16 @@ export const SidebarData = [
                 title: "IIB Migration Dashboard",
                 path: "/migration-tools/iib",
                 icon: <VscDashboard style={iconStyle} />
+            },
+            {
+                title: "CloudHub Migration Dashboard",
+                path: "/migration-tools/cloudhub-migration",
+                icon: <VscDashboard style={iconStyle} />
+            },
+            {
+                title: "Mule 3 Migration Dashboard",
+                path: "/migration-tools/mule3-migration",
+                icon: <VscDashboard style={iconStyle} />
             }
         ]
     },
@@ -69,6 +84,16 @@ export const SidebarData = [
             {
                 title: "Code Quality Analysis",
                 path: "/generate",
+                icon: <IoIcons.IoMdHelpCircle style={iconStyle} />
+            }
+        ]
+    },
+    {
+        title: "Mule Application tools",
+        items: [
+            {
+                title: "Generate Mule Application",
+                path: "/generate-mule-app",
                 icon: <IoIcons.IoMdHelpCircle style={iconStyle} />
             }
         ]

@@ -6,6 +6,7 @@ import config from '../config/config';
 import FileUpload from '../components/fileUpload'; // Import FileUpload
 
 function ContentUpload() {
+    const [apiEndpoint, setApiEndpoint] = useState(config.apiUrlPython+ '/xsd-to-raml');
     const [content, setContent] = useState('');
     const [file, setFile] = useState(null);
     const [output, setOutput] = useState('');
@@ -13,57 +14,43 @@ function ContentUpload() {
     let title = 'RAML Example Generator';
     let subtitle = 'To generate the example, paste your DataType in the text area or upload a DataTypefile. Then click the "Submit" button to generate the example.';
 
-    const handleFileUpload = (uploadedFile, uploadedContent) => {
-      
-        if (uploadedFile) {
-            setFile(uploadedFile);
-            setContent(uploadedContent); // Store content from FileUpload
-        } else {
-            setFile(null);
-            setContent(uploadedContent);
-        }
-    };
+    const handleFileUpload = async (uploadedFile, uploadedContent) => {
+      setLoading(true);
+      setOutput('');
 
-    const handleSubmit = async () => {
-        setLoading(true);
-        setOutput('');
+      let promptValue = uploadedContent;
 
-        let promptValue = content; // Use the content state directly
+      try {
+          const response = await fetch(config.apiUrlPython + '/generateRamlExample', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ prompt: promptValue }),
+          });
 
-        await sendRequest(promptValue);
-    };
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
 
-    const sendRequest = async (promptValue) => {
-        try {
-            const response = await fetch(config.apiUrlPython + '/generateRamlExample', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ prompt: promptValue }),
-            });
+          const data = await response.json();
+          setOutput(data);
+      } catch (error) {
+          console.error('Error submitting data:', error);
+          setOutput('Error processing request.');
+      } finally {
+          setLoading(false);
+      }
+  };
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            setOutput(data);
-        } catch (error) {
-            console.error('Error submitting data:', error);
-            setOutput('Error processing request.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div>
-            <SmallBanner title={title} subtitle={subtitle} />
-                <FileUpload onFileUpload={handleFileUpload} /> {/* Add FileUpload */}
-            <FileViewer apiResponse={output} isLoading={loading} />
-        </div>
-    );
+  return (
+      <div>
+          <SmallBanner title={title} subtitle={subtitle} />
+          {output && <FileViewer apiResponse={output} isLoading={loading} />}
+          {!output &&<FileUpload onFileUpload={handleFileUpload} />}
+         
+      </div>
+  );
 }
 
 export default ContentUpload;

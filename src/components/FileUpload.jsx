@@ -1,13 +1,17 @@
 import React, { useState, useRef } from 'react';
 import '../css/file-upload.css';
 import Switch from "react-switch";
+import { Oval } from 'react-loader-spinner'; // Import the loading spinner
+
 const FileUpload = ({ onFileUpload }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
     const [uploadStatus, setUploadStatus] = useState(null);
-    const [isTextMode, setIsTextMode] = useState(false); // Toggle state
-    const [textAreaContent, setTextAreaContent] = useState(''); // Text area content
+    const [isTextMode, setIsTextMode] = useState(false);
+    const [textAreaContent, setTextAreaContent] = useState('');
     const [border, setBorder] = useState('#1c2764 2px dashed');
+    const [isLoading, setIsLoading] = useState(false); // Add loading state
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setSelectedFile(file);
@@ -17,24 +21,25 @@ const FileUpload = ({ onFileUpload }) => {
     const handleUploadClick = () => {
         if (!isTextMode) {
             fileInputRef.current.click();
-            
         }
     };
-    const changeLayout=()=>{
+
+    const changeLayout = () => {
         setIsTextMode(!isTextMode);
         if (isTextMode) {
-           
-            setBorder('#1c2764 2px dashed')
+            setBorder('#1c2764 2px dashed');
+        } else {
+            setBorder('none');
         }
-        else {
-            setBorder('none')
-    }}
+    };
+
     const handleUploadButtonClick = () => {
+        setIsLoading(true); // Start loading
+        console.log('Upload started, isLoading:', isLoading);
         setUploadStatus('uploading');
 
         if (isTextMode) {
             setBorder('none');
-            // Upload text area content
             onFileUpload(
                 new File([textAreaContent], 'pasted_content.txt', {
                     type: 'text/plain',
@@ -43,22 +48,26 @@ const FileUpload = ({ onFileUpload }) => {
             );
             setUploadStatus('success');
             setTextAreaContent('');
+            setIsLoading(false); 
+            console.log('Upload finished, isLoading:', isLoading);
         } else if (selectedFile) {
-            // Upload file
             const reader = new FileReader();
 
             reader.onload = (event) => {
                 onFileUpload(selectedFile, event.target.result);
                 setUploadStatus('success');
+                setIsLoading(false);
             };
 
             reader.onerror = () => {
                 setUploadStatus('error');
+                setIsLoading(false); 
             };
 
             reader.readAsText(selectedFile);
         } else {
             setUploadStatus('error');
+            setIsLoading(false); 
         }
         setSelectedFile(null);
     };
@@ -78,8 +87,9 @@ const FileUpload = ({ onFileUpload }) => {
 
     return (
         <div className="file-upload-container">
+             {isLoading && <Oval className="loading-icon" color="#1c2764" height={20} width={20} />}
             <div className="file-upload-sub-container">
-                <div className="file-upload-input-container" style={{border: border  }} onClick={handleUploadClick}>
+                <div className="file-upload-input-container" style={{ border: border }} onClick={handleUploadClick}>
                     {isTextMode ? (
                         <textarea
                             value={textAreaContent}
@@ -91,7 +101,8 @@ const FileUpload = ({ onFileUpload }) => {
                         />
                     ) : (
                         <>
-                            <input className='file-upload-input'
+                            <input
+                                className="file-upload-input"
                                 type="file"
                                 ref={fileInputRef}
                                 style={{ display: 'none' }}
@@ -121,8 +132,17 @@ const FileUpload = ({ onFileUpload }) => {
                 <div>
                     <button onClick={handleUploadButtonClick}>Upload</button>
                     {selectedFile || isTextMode ? <button onClick={handleClear}>Clear</button> : null}
-                    <div className='toggle-div'>
-                    <Switch className='toggle'onChange={() => changeLayout()} checked={isTextMode} disabled ={false} offColor ={'#273275'} onColor = {'#273275'}/> Paste Content
+                    <div className="toggle-div">
+                        <Switch
+                            className="toggle"
+                            onChange={() => changeLayout()}
+                            checked={isTextMode}
+                            disabled={false}
+                            offColor={'#273275'}
+                            onColor={'#273275'}
+                        />
+                        Paste Content
+                       
                     </div>
                 </div>
             </div>

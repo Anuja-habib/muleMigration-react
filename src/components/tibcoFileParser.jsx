@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import config from '../config/config';
+import Dashboard from './dashboard';
+import '../css/file-upload.css';
 const ZipUploader = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [apiResponse, setApiResponse] = useState(null);
@@ -51,17 +53,21 @@ const ZipUploader = () => {
 
   return (
     <div>
+    {!apiResponse &&
+      (<div className="file-upload-container">
+      <div className="file-upload-sub-container">
+        <div className='file-upload-input-container file-upload-input-container--zip'>
       <input type="file" accept=".zip" onChange={handleFileChange} />
+      </div>
       <button onClick={handleUpload} disabled={!selectedFile}>
         Upload ZIP File
       </button>
-
-      {apiResponse && (
-        <div>
-          <h2>API Response:</h2>
-          <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
-        </div>
-      )}
+      </div>
+      </div>)}
+      {apiResponse && ( <div className='dashboard-position'>
+      
+         <Dashboard data={apiResponse} />
+    </div>)}
     </div>
   );
 };

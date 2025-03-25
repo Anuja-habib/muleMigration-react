@@ -117,4 +117,6 @@ textarea:focus {
       .dark-mode textarea::placeholder {
           color: #777;
       }
-      
+.file-upload-input-container--zip{
+        border: 2px dashed #b3b3b3;
+}

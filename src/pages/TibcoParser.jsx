@@ -31,7 +31,7 @@ const TibcoConverter = () => {
         onUploadStart={handleUploadStart}
       />
       {uploadError && <p style={{ color: 'red' }}>{uploadError}</p>}
-      <FileViewer apiResponse={apiResponse} error={uploadError} isLoading={isLoading} />
+     
     </div>
   );
 };

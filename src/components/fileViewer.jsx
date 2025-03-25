@@ -6,10 +6,18 @@ import { GrCopy } from "react-icons/gr";
 import yaml from "js-yaml";
 import { Oval } from  'react-loading-icons'
 import { MdDownload } from "react-icons/md";
+import  LoadingOverlay from './LoadingOverlay'; // Import the loading overlay
 import '../css/textPreview.css';
 
 // ... (formatXml and formatJava functions remain the same)
-
+const customStyle = {
+    lineHeight: '1.5',
+    fontSize: '1rem',
+    borderRadius: '5px',
+    backgroundColor: '#f7f7f7',
+    padding: '20px'
+  };
+  
 const FileViewer = ({ apiResponse, error, isLoading }) => {
     const [copied, setCopied] = useState(false);
 
@@ -54,7 +62,7 @@ const FileViewer = ({ apiResponse, error, isLoading }) => {
     };
 
     return (
-        <div className="responsePreview" style={{ fontFamily: 'monospace', fontSize: '14px', maxHeight: '20%', overflowY: 'auto' }}> 
+        <div className="responsePreview" style={{ fontFamily: 'monospace', fontSize: '14px', height: '90%',padding : '10px', overflow: 'auto' }}>
             {apiResponse ? (
                 <div>
                     <CopyToClipboard text={JSON.stringify(apiResponse, null, 2)} onCopy={() => setCopied(true)}>
@@ -69,9 +77,8 @@ const FileViewer = ({ apiResponse, error, isLoading }) => {
                         {formatData(apiResponse)}
                     </SyntaxHighlighter>
                 </div>
-            ) : isLoading ? (
-                <Oval stroke="#000000" />
-            ) : (
+            ) : isLoading ? ( <LoadingOverlay isLoading={isLoading}/> ) :
+             (
                 <div>{error && <p>Error: {error.message}</p>}</div>
             )}
         </div>
