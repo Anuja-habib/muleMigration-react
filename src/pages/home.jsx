@@ -24,6 +24,7 @@ const PageContainer = styled.div`
 // Two-column layout like Anypoint Platform
 const ContentSection = styled.section`
   padding: 40px 16px;
+  flex: 1 0 auto;
 `;
 
 const ContentContainer = styled.div`
@@ -47,6 +48,8 @@ const LeftColumn = styled.div`
 const RightColumn = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 24px;
+  height: 100%;
 `;
 
 // Card components
@@ -130,98 +133,30 @@ const ToolDescription = styled.span`
   color: #666;
 `;
 
-const RightToolsList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const RightToolItem = styled.li`
-  &:not(:last-child) {
-    border-bottom: 1px solid #f0f0f0;
-  }
-`;
-
-const RightToolLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  padding: 16px 20px;
-  text-decoration: none;
-  color: inherit;
-  transition: background-color 0.2s;
-  
-  &:hover {
-    background-color: #f8f9fa;
-  }
-  
-  svg {
-    font-size: 20px;
-    color: #009de2;
-    margin-right: 12px;
-  }
-`;
-
-// Improved footer styling
-const FooterSection = styled.section`
+const FooterWrapper = styled.footer`
   width: 100%;
-  background-color: white;
-  border-top: 1px solid #e5e5e5;
-  margin-top: 40px;
+  background-color: #eef4ff;
+  padding: 20px 0;
+  text-align: left;
+  flex-shrink: 0;
+  margin-top: auto;
 `;
 
-const FooterImageContainer = styled.div`
-  width: 100%;
-  position: relative;
-  background: white;
-  overflow: hidden;
-  height: 240px;
-  
-  @media (max-width: 768px) {
-    height: 180px;
-  }
-`;
-
-const FooterImageBackground = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url(${imgDiv});
-  background-size: cover;
-  background-position: center;
-  opacity: 1; // Increased opacity for better visibility
-`;
-
-const FooterImageOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0.3)); // Lighter overlay
-`;
-
-const FooterImageText = styled.div`
-  font-size: 42px;
-  font-weight: bold;
-  color: #032d60;
-  text-shadow: 2px 2px 3px rgba(255,255,255,0.7);
-  
-  @media (max-width: 768px) {
-    font-size: 32px;
-  }
-`;
-
-const FooterContentContainer = styled.div`
+const FooterContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px 16px;
-  border-top: 1px solid #e5e5e5;
+  padding: 0 16px;
+  color: #666;
+  font-size: 14px;
 `;
+
+const newFeatures = [
+  {
+    title: "DataWeave Script Generator",
+    path: "/mapping-tools/dwl-generator",
+    icon: <RiAiGenerate />,
+  }
+];
 
 const Home = () => {
   // Featured tools with descriptions
@@ -256,11 +191,20 @@ const Home = () => {
       description: "Visualize and plan your TIBCO migration journey"
     },
     {
-      title: "Generate",
-      path: "/generate",
-      icon: <RiAiGenerate2 />
+      title: "IIB Migration Dashboard",
+      path: "/migration-tools/tibco",
+      icon: <RiAiGenerate2 />,
+      description: "Visualize and plan your IIB migration journey"
     }
   ];
+
+  const SimpleFooter = () => (
+    <FooterWrapper>
+      <FooterContent>
+        © 2025 MuleSoft GDC India. All rights reserved.
+      </FooterContent>
+    </FooterWrapper>
+  );
 
   return (
     <PageContainer>
@@ -300,34 +244,45 @@ const Home = () => {
                 <span>Migration Tools</span>
               </SectionHeader>
               
-              <RightToolsList>
+              <MainTools>
                 {migrationTools.map((tool, index) => (
-                  <RightToolItem key={index}>
-                    <RightToolLink to={tool.path}>
+                  <ToolLink to={tool.path} key={index}>
+                    <ToolIconContainer>
                       {tool.icon}
-                      <span>{tool.title}</span>
-                    </RightToolLink>
-                  </RightToolItem>
+                    </ToolIconContainer>
+                    <ToolContent>
+                      <ToolTitle>{tool.title}</ToolTitle>
+                    </ToolContent>
+                  </ToolLink>
                 ))}
-              </RightToolsList>
+              </MainTools>
+            </SectionContainer>
+
+            <SectionContainer>
+              <SectionHeader>
+                <FaIcons.FaCode />
+                <span>New Feature</span>
+              </SectionHeader>
+              
+              <MainTools>
+                {newFeatures.map((tool, index) => (
+                  <ToolLink to={tool.path} key={index}>
+                    <ToolIconContainer>
+                      {tool.icon}
+                    </ToolIconContainer>
+                    <ToolContent>
+                      <ToolTitle>{tool.title}</ToolTitle>
+                    </ToolContent>
+                  </ToolLink>
+                ))}
+              </MainTools>
             </SectionContainer>
           </RightColumn>
         </ContentContainer>
       </ContentSection>
       
-      {/* Improved footer section */}
-      <FooterSection>
-        <FooterImageContainer>
-          <FooterImageBackground />
-          <FooterImageOverlay>
-            <FooterImageText>Welcome</FooterImageText>
-          </FooterImageOverlay>
-        </FooterImageContainer>
-        
-        <FooterContentContainer>
-          <Footer />
-        </FooterContentContainer>
-      </FooterSection>
+      {/* Simplified footer section */}
+      <SimpleFooter />
     </PageContainer>
   );
 };

@@ -1,0 +1,14 @@
+.detail-display {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-top: 20px; /* Add some margin to separate it from the main content */
+  border-radius: 20px;
+  background: #e0e0e0;
+  box-shadow:  20px 20px 60px #bebebe,
+              -20px -20px 60px #ffffff;
+}
+
+.detail-display h2 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
