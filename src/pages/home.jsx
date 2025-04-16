@@ -1,6 +1,6 @@
 // Updated home.jsx with improved footer styling
 import React from "react";
-import { Banner } from "../components/Banner";
+// import { Banner } from "../components/Banner";
 import { Link } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 import { RiAiGenerate, RiAiGenerate2 } from "react-icons/ri";
