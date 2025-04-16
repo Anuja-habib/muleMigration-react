@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FileUpload from "../components/FileUpload";
 // import FileViewer from '../components/FileViewer';
 import { Flex, Item } from "@react-css/flex";
-import { SmallBanner } from "../components/Banner";
+// import { SmallBanner } from "../components/Banner";
 import config from "../config/config";
 const XsdToRaml = () => {
     let title = "XSD to RAML Converter";
@@ -49,7 +49,7 @@ const XsdToRaml = () => {
 
     return (
         <div className="row">
-            <SmallBanner title={title} subtitle={subtitle} />
+            {/* <SmallBanner title={title} subtitle={subtitle} /> */}
             {uploadComplete ? (
                 <>
                     <div className="column">
