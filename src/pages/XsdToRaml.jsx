@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import FileUpload from '../components/FileUpload';
-import FileViewer from '../components/FileViewer';
+// import FileViewer from '../components/FileViewer';
 import { Flex, Item } from '@react-css/flex';
 import {SmallBanner} from '../components/Banner'
 import config from '../config/config';
@@ -52,10 +52,10 @@ const XsdToRaml = () => {
             {uploadComplete ? (
                 <>
                     <div className='column'>
-                        <FileViewer apiResponse={originalFileData} error={error} isLoading={false} />
+                        {/* <FileViewer apiResponse={originalFileData} error={error} isLoading={false} /> */}
                     </div>
                     <div className='column'>
-                        <FileViewer apiResponse={apiResponseData} error={error} isLoading={isLoading} />
+                        {/* <FileViewer apiResponse={apiResponseData} error={error} isLoading={isLoading} /> */}
                     </div>
                 </>
             ) : (
