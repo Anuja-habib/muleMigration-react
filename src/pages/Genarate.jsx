@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import InputComponent from '../components/promptInput';
-import FileViewer from '../components/fileViewer';
+import FileViewer from '../components/FileViewer';
 
 const Generate = () => {
   const [apiData, setApiData] = useState(null);
