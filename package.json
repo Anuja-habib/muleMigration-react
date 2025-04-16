@@ -5,9 +5,9 @@
   "proxy": "http://127.0.0.1:5000/",
   "type": "module",
   "scripts": {
-    "start": "export HTTPS=true&&SSL_CRT_FILE=./cert.pem&&SSL_KEY_FILE=./key.pem react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "serve dist -s",
+    "build": "vite build",
+    "test": "vite test",
     "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -32,8 +32,9 @@
     "react-loading-icons": "^1.1.0",
     "react-router-dom": "^7.1.5",
     "react-switch": "^7.1.0",
-    "react-syntax-highlighter": "^15.6.1",
+    "react-syntax-highlighter": "^5.8.0",
     "recharts": "^2.15.1",
+    "serve": "^14.2.4",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
