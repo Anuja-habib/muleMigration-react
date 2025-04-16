@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import FileUpload from "../components/FileUpload";
-// import FileViewer from "../components/FileViewer";
+import FileViewer from "../components/FileViewer";
 import { FileExplorer } from "../components/FileExplorer";
 import Alert from "react-bootstrap/Alert";
 import config from "../config/config";
-// import {SmallBanner} from '../components/Banner'
+import {SmallBanner} from '../components/Banner'
 const WsdlToRaml = () => {
     let title = "WSDL to RAML Converter";
     let subtitle =
@@ -111,13 +111,13 @@ const WsdlToRaml = () => {
                     </div>
                     <div style={{ flex: 1, overflowX: "auto", display: "flex", flexDirection: "column" }}>
                         <div ref={viewerRef} style={{ width: "100%", overflow: "hidden" }}>
-                            {/* <FileViewer apiResponse={originalFileData} error={error} isLoading={isLoading} /> */}
+                            <FileViewer apiResponse={originalFileData} error={error} isLoading={isLoading} />
                         </div>
                     </div>
                 </div>
             ) : (
                 <div>
-                    {/* <SmallBanner title={title} subtitle={subtitle} /> */}
+                    <SmallBanner title={title} subtitle={subtitle} />
                     <FileUpload onFileUpload={handleFileUpload} />
                 </div>
             )}

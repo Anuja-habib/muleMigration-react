@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import InputComponent from '../components/promptInput';
-// import FileViewer from '../components/FileViewer';
+import FileViewer from '../components/FileViewer';
 
 const Generate = () => {
   const [apiData, setApiData] = useState(null);
@@ -29,7 +29,7 @@ const Generate = () => {
     <div>
       <div>
       <InputComponent onPromptSubmit={handlePromptSubmit} />
-      {/* <FileViewer apiResponse={apiData} error={error} isLoading={isLoading}/> */}
+      <FileViewer apiResponse={apiData} error={error} isLoading={isLoading}/>
     </div>
     </div>
   );
