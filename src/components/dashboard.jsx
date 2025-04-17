@@ -1,16 +1,16 @@
 // src/Dashboard.js
-import React from 'react';
-import ComponentDistribution from './ComponentDistribution';
-import ComponentDetails from './ComponentDetails';
-import '../css/dashboard.css'; // Create this CSS file
+import React from 'react'
+import ComponentDistribution from './ComponentDistribution'
+import ComponentDetails from './ComponentDetails'
+import '../css/dashboard.css' // Create this CSS file
 
 function Dashboard({ data }) {
   if (!data || !data.result) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
-  const componentCounts = data.result.componentCounts;
-  const components = data.result.components;
+  const componentCounts = data.result.componentCounts
+  const components = data.result.components
 
   return (
     <div className="dashboard">
@@ -37,7 +37,7 @@ function Dashboard({ data }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Dashboard;
+export default Dashboard
