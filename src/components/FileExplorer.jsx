@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FileViewer from './fileViewer'; // Adjust path
+import FileViewer from './FileViewer'; // Adjust path
 import JSZip from 'jszip';
 import { MdArrowDropDown, MdArrowRight, MdDownload } from 'react-icons/md';
 import '../css/fileExplorer.css'

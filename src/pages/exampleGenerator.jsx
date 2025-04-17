@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import FileViewer from '../components/fileViewer';
+import FileViewer from '../components/FileViewer';
 import "../css/textPreview.css";
 import { SmallBanner } from '../components/Banner';
 import config from '../config/config';
-import FileUpload from '../components/fileUpload'; // Import FileUpload
+import FileUpload from '../components/FileUpload'; // Import FileUpload
 
 function ContentUpload() {
     const [apiEndpoint, setApiEndpoint] = useState(config.apiUrlPython+ '/xsd-to-raml');

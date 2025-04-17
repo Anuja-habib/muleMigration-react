@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TibcoFileUploader from '../components/tibcoFileParser'; // Assuming FileUploader.js is in the same directory
-import FileViewer from '../components/fileViewer'; // Assuming FileViewer.js is in the same directory
+import FileViewer from '../components/FileViewer'; // Assuming FileViewer.js is in the same directory
 
 const TibcoConverter = () => {
   const [apiResponse, setApiResponse] = useState(null);
