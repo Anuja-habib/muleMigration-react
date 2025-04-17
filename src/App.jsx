@@ -25,7 +25,7 @@ import {
     EventsTwo,
 } from "./pages/IntegrationTools";
 import WsdlToRaml from "./pages/wsdlToRaml";
-import Home from "./pages/home";
+import Home from "./pages/Home";
 import Generate from "./pages/Genarate";
 import Footer from './components/Footer';
 import styled from "styled-components";
