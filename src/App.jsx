@@ -14,6 +14,7 @@ import Home from './pages/Home'
 import Generate from './pages/Genarate'
 import Footer from './components/Footer'
 import styled from 'styled-components'
+import SimpleFooter from './components/SimpleFooter'
 
 // Add these styled components
 const AppContainer = styled.div`
@@ -65,6 +66,7 @@ function App() {
           </Routes>
           <ChatBotWithNavigation />
         </MainContent>
+        <SimpleFooter />
       </Router>
     </AppContainer>
   )
