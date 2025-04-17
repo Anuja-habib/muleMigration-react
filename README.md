@@ -1,8 +1,16 @@
-# React + Vite
+# ⚡ Mule Accelerator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Vite + React project with useful scripts for development, linting, formatting, and building.
 
-Currently, two official plugins are available:
+## 📜 Available Scripts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Command            | Description                                 |
+| ------------------ | ------------------------------------------- |
+| `npm run dev`      | Start the Vite development server           |
+| `npm run build`    | Build the project for production            |
+| `npm run preview`  | Preview the production build                |
+| `npm run start`    | Serve the built app from the `dist/` folder |
+| `npm run test`     | Run tests (configured with Vite)            |
+| `npm run lint`     | Run ESLint to check for code issues         |
+| `npm run lint:fix` | Automatically fix ESLint issues             |
+| `npm run format`   | Format code using Prettier                  |
