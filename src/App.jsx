@@ -7,6 +7,7 @@ import ChatBot from './components/ChatBot'
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import { RamlExampleGenarator, RamlTools } from './pages/RamlTools'
 import XsdToRaml from './pages/XsdToRaml'
+import Feedback from './pages/Feedback'
 import { Services, XsltMappingExtractor } from './pages/MappingTools'
 import { IntegrationTools, TibcoIntegrationTools, EventsTwo } from './pages/IntegrationTools'
 import WsdlToRaml from './pages/wsdlToRaml'
@@ -63,6 +64,7 @@ function App() {
             <Route path="/migration-tools/tibco" element={<TibcoIntegrationTools />} />
             <Route path="/events/events2" element={<EventsTwo />} />
             <Route path="/generate" element={<Generate />} />
+            <Route path="/feedback" element={<Feedback />} />
           </Routes>
           <ChatBotWithNavigation />
         </MainContent>
