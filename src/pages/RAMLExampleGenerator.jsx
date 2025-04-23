@@ -1,11 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react'
-import FileUpload from '../components/FileUpload'
-import FileViewer from '../components/FileViewer'
-import { FileExplorer } from '../components/FileExplorer'
-import Alert from 'react-bootstrap/Alert'
-import config from '../config/config'
-import { SmallBanner } from '../components/Banner'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import {
   FiUploadCloud,
   FiCopy,
@@ -17,6 +13,7 @@ import {
 } from 'react-icons/fi'
 import { MdContentPaste } from 'react-icons/md'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import config from '../config/config'
 import Editor from '@monaco-editor/react'
 
 const PageContainer = styled.div`
@@ -426,7 +423,7 @@ const ConversionTip = styled.div`
   }
 `
 
-const WsdlToRaml = () => {
+const RAMLExampleGenerator = () => {
   const [inputContent, setInputContent] = useState('')
   const [outputContent, setOutputContent] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -510,12 +507,9 @@ const WsdlToRaml = () => {
     <PageContainer>
       <DescriptionSection>
         <Title>
-          <FiCode /> WSDL to RAML Converter
+          <FiCode /> RAML Example Generator
         </Title>
-        <p>
-          Transform your WSDL Schema Definitions into RAML specifications with our powerful
-          converter.
-        </p>
+        <p>Generate RAML examples for the provided DataType.</p>
 
         <Description>
           <FeatureCard>
@@ -523,17 +517,17 @@ const WsdlToRaml = () => {
               <FiUploadCloud /> Easy Upload
             </h3>
             <p>
-              Drag and drop your WSDL files or paste content directly. Supports single and multiple
-              schema files with automatic validation.
+              Drag and drop your datatype files or paste content directly. Supports single and
+              multiple schema files with automatic validation.
             </p>
           </FeatureCard>
 
           <FeatureCard>
             <h3>
-              <FiCode /> Smart Conversion
+              <FiCode /> Smart Generation
             </h3>
             <p>
-              Automatically converts complex WSDL structures into clean, well-formatted RAML types
+              Automatically generates data type structures into clean, well-formatted RAML examples
               with intelligent type mapping and examples.
             </p>
           </FeatureCard>
@@ -543,7 +537,7 @@ const WsdlToRaml = () => {
               <FiDownload /> Instant Export
             </h3>
             <p>
-              Download your converted RAML instantly or copy to clipboard. Includes syntax
+              Download your converted RAML example instantly or copy to clipboard. Includes syntax
               highlighting and validation for perfect API specifications.
             </p>
           </FeatureCard>
@@ -555,7 +549,7 @@ const WsdlToRaml = () => {
           <PanelHeader>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <PanelTitle>
-                <FiCode /> Input XSD
+                <FiCode /> Input Datatype
               </PanelTitle>
             </div>
             <ActionButtons>
@@ -576,7 +570,8 @@ const WsdlToRaml = () => {
           </TabContainer>
           {activeTab === 'paste' && (
             <ConversionTip>
-              <FiCode /> Write or paste your WSDL content below and click Convert to generate RAML
+              <FiCode /> Write or paste your datatype content below and click Convert to generate
+              RAML example
             </ConversionTip>
           )}
           <EditorContent>
@@ -590,14 +585,15 @@ const WsdlToRaml = () => {
             {activeTab === 'upload' ? (
               <UploadArea onClick={() => fileInputRef.current?.click()}>
                 <FiUploadCloud size={48} color="#586069" />
-                <p>Drop your WSDL file here or click to upload</p>
+                <p>Drop your datatype file here or click to upload</p>
               </UploadArea>
             ) : (
               // <TextArea
               //   value={inputContent}
               //   onChange={(e) => setInputContent(e.target.value)}
-              //   placeholder="Write or paste your WSDL content here..."
+              //   placeholder="Write or paste your XSD content here..."
               // />
+              // <div className="w-full h-full rounded-2xl overflow-hidden">
               <Editor
                 height="100%"
                 defaultLanguage="yaml"
@@ -614,6 +610,7 @@ const WsdlToRaml = () => {
                   tabSize: 4,
                 }}
               />
+              // </div>
             )}
           </EditorContent>
           {activeTab === 'paste' && (
@@ -627,13 +624,13 @@ const WsdlToRaml = () => {
                 ) : (
                   <>
                     <FiEdit />
-                    Start writing or paste your WSDL content
+                    Start writing or paste your datatype content
                   </>
                 )}
               </ConversionStatus>
               {inputContent && (
                 <ConvertButton onClick={() => convertToRaml(inputContent)}>
-                  <FiCode /> Convert to RAML
+                  <FiCode /> Generate RAML Example
                 </ConvertButton>
               )}
             </InputActions>
@@ -648,12 +645,12 @@ const WsdlToRaml = () => {
               </PanelTitle>
               {error ? (
                 <StatusIndicator error>
-                  <FiAlertCircle /> Conversion failed
+                  <FiAlertCircle /> Generation failed
                 </StatusIndicator>
               ) : (
                 outputContent && (
                   <StatusIndicator>
-                    <FiCheckCircle /> Conversion successful
+                    <FiCheckCircle /> Generation successful
                   </StatusIndicator>
                 )
               )}
@@ -671,7 +668,7 @@ const WsdlToRaml = () => {
           </PanelHeader>
           <CodeViewer>
             {isLoading ? (
-              <LoadingSpinner>Converting...</LoadingSpinner>
+              <LoadingSpinner>Generating...</LoadingSpinner>
             ) : error ? (
               <div style={{ padding: '16px', color: '#cb2431' }}>{error}</div>
             ) : (
@@ -699,4 +696,4 @@ const WsdlToRaml = () => {
   )
 }
 
-export default WsdlToRaml
+export default RAMLExampleGenerator

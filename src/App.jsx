@@ -16,6 +16,8 @@ import Footer from './components/Footer'
 import styled from 'styled-components'
 import SimpleFooter from './components/SimpleFooter'
 
+import RAMLExampleGenerator from './pages/RAMLExampleGenerator'
+
 // Add these styled components
 const AppContainer = styled.div`
   display: flex;
@@ -51,7 +53,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/raml-tools" element={<RamlTools />} />
-            <Route path="/raml-tools/example-generator" element={<RamlExampleGenarator />} />
+            {/* <Route path="/raml-tools/example-generator" element={<RamlExampleGenarator />} /> */}
+            <Route path="/raml-tools/example-generator" element={<RAMLExampleGenerator />} />
             <Route path="/raml-tools/xsd-to-raml" element={<XsdToRaml />} />
             <Route path="/raml-tools/wsdl-to-raml" element={<WsdlToRaml />} />
             <Route path="/mapping-tools" element={<Services />} />
@@ -66,8 +69,8 @@ function App() {
           </Routes>
           <ChatBotWithNavigation />
         </MainContent>
-        <SimpleFooter />
       </Router>
+      <Footer />
     </AppContainer>
   )
 }
