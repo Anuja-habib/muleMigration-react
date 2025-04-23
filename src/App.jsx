@@ -1,8 +1,6 @@
 // App.jsx
 import React, { useState } from 'react'
 import './App.css'
-import Sidebar from './components/Sidebar'
-import GlobalNavigation from './components/GlobalNavigation'
 import ChatBot from './components/ChatBot'
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import { RamlExampleGenarator, RamlTools } from './pages/RamlTools'
@@ -12,9 +10,9 @@ import { IntegrationTools, TibcoIntegrationTools, EventsTwo } from './pages/Inte
 import WsdlToRaml from './pages/wsdlToRaml'
 import Home from './pages/Home'
 import Generate from './pages/Genarate'
-import Footer from './components/Footer'
+import Layout from './components/Layout'
+
 import styled from 'styled-components'
-import SimpleFooter from './components/SimpleFooter'
 
 import RAMLExampleGenerator from './pages/RAMLExampleGenerator'
 
@@ -38,39 +36,32 @@ const ChatBotWithNavigation = () => {
 }
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
-
   return (
     <AppContainer>
       <Router>
-        <GlobalNavigation toggleSidebar={toggleSidebar} />
-        <Sidebar isOpen={sidebarOpen} toggle={toggleSidebar} />
         <MainContent>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/raml-tools" element={<RamlTools />} />
-            {/* <Route path="/raml-tools/example-generator" element={<RamlExampleGenarator />} /> */}
-            <Route path="/raml-tools/example-generator" element={<RAMLExampleGenerator />} />
-            <Route path="/raml-tools/xsd-to-raml" element={<XsdToRaml />} />
-            <Route path="/raml-tools/wsdl-to-raml" element={<WsdlToRaml />} />
-            <Route path="/mapping-tools" element={<Services />} />
-            <Route
-              path="/mapping-tools/xslt-mapping-extractor"
-              element={<XsltMappingExtractor />}
-            />
-            <Route path="/migration-tools" element={<IntegrationTools />} />
-            <Route path="/migration-tools/tibco" element={<TibcoIntegrationTools />} />
-            <Route path="/events/events2" element={<EventsTwo />} />
-            <Route path="/generate" element={<Generate />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="/raml-tools" element={<RamlTools />} />
+              {/* <Route path="/raml-tools/example-generator" element={<RamlExampleGenarator />} /> */}
+              <Route path="/raml-tools/example-generator" element={<RAMLExampleGenerator />} />
+              <Route path="/raml-tools/xsd-to-raml" element={<XsdToRaml />} />
+              <Route path="/raml-tools/wsdl-to-raml" element={<WsdlToRaml />} />
+              <Route path="/mapping-tools" element={<Services />} />
+              <Route
+                path="/mapping-tools/xslt-mapping-extractor"
+                element={<XsltMappingExtractor />}
+              />
+              <Route path="/migration-tools" element={<IntegrationTools />} />
+              <Route path="/migration-tools/tibco" element={<TibcoIntegrationTools />} />
+              <Route path="/events/events2" element={<EventsTwo />} />
+              <Route path="/generate" element={<Generate />} />
+            </Route>
           </Routes>
           <ChatBotWithNavigation />
         </MainContent>
       </Router>
-      <Footer />
     </AppContainer>
   )
 }
