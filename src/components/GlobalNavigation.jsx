@@ -155,14 +155,6 @@ const GlobalNavigation = ({ toggleSidebar }) => {
         <IconButton title="Help">
           <IoMdHelpCircle />
         </IconButton>
-
-        {/* <IconButton title="Updates">
-          <MdOutlineUpdate />
-        </IconButton>
-        
-        <ProfileCircle title="Profile">
-          {userInitials}
-        </ProfileCircle> */}
       </RightSection>
     </NavContainer>
   )

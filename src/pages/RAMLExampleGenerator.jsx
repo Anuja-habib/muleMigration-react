@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import {
@@ -10,11 +10,16 @@ import {
   FiEdit,
   FiCheckCircle,
   FiAlertCircle,
+  FiSend,
 } from 'react-icons/fi'
 import { MdContentPaste } from 'react-icons/md'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import config from '../config/config'
 import Editor from '@monaco-editor/react'
+
+const FiSendNoMargin = styled(FiSend)`
+  margin-right: 0;
+`
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -227,7 +232,7 @@ const TextArea = styled.textarea`
 `
 
 const ConvertButton = styled(IconButton)`
-  background: #4a46cc;
+  background: #3430af;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -235,9 +240,6 @@ const ConvertButton = styled(IconButton)`
   font-weight: 600;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(74, 70, 204, 0.2);
-  position: relative;
-  overflow: hidden;
-  min-width: 160px;
 
   &:before {
     content: '';
@@ -252,7 +254,7 @@ const ConvertButton = styled(IconButton)`
   }
 
   &:hover {
-    background: #3f3bb3;
+    background: #3830af;
     color: white;
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(74, 70, 204, 0.3);
@@ -270,7 +272,6 @@ const ConvertButton = styled(IconButton)`
 
   svg {
     font-size: 18px;
-    margin-right: 8px;
   }
 
   @media (max-width: 768px) {
@@ -344,6 +345,7 @@ const TabContainer = styled.div`
   padding: 12px 16px;
   background: #f6f8fa;
   border-bottom: 1px solid #e1e4e8;
+  justify-content: space-between;
 `
 
 const TabGroup = styled.div`
@@ -423,6 +425,34 @@ const ConversionTip = styled.div`
   }
 `
 
+const LoadingButton = styled.div`
+  background: #3430af;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(74, 70, 204, 0.2);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: default;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+`
+
+const LoadingButtonSpinner = styled.div`
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.4s linear infinite;
+`
+
 const RAMLExampleGenerator = () => {
   const [inputContent, setInputContent] = useState('')
   const [outputContent, setOutputContent] = useState('')
@@ -431,30 +461,39 @@ const RAMLExampleGenerator = () => {
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('upload')
   const fileInputRef = React.useRef(null)
+  const [isFileUploading, setIsFileUploading] = useState(true)
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0]
+    console.log(file)
     if (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
         setInputContent(e.target.result)
-        convertToRaml(e.target.result)
       }
       reader.readAsText(file)
+      console.log(inputContent)
+      setTimeout(function () {
+        setIsFileUploading(false)
+      }, 1000)
     }
   }
 
-  const convertToRaml = async (content) => {
+  const handleSubmit = () => {
+    generateRAMLExamples(inputContent)
+  }
+
+  const generateRAMLExamples = async (content) => {
     setIsLoading(true)
     setError(null)
 
-    const formData = new FormData()
-    formData.append('file', new Blob([content], { type: 'text/xml' }), 'input.xsd')
-
     try {
-      const response = await fetch(config.apiUrlPython + '/xsd-to-raml', {
+      const response = await fetch(config.apiUrlPython + '/generateRamlExample', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: content }),
       })
 
       if (!response.ok) {
@@ -462,7 +501,7 @@ const RAMLExampleGenerator = () => {
       }
 
       const data = await response.json()
-      setOutputContent(data.result)
+      setOutputContent(JSON.parse(data.result))
     } catch (err) {
       setError(err.message)
     } finally {
@@ -485,22 +524,6 @@ const RAMLExampleGenerator = () => {
   const handleCopy = (content) => {
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }
-
-  const renderCodeWithLineNumbers = (content) => {
-    if (!content) return null
-    const lines = content.split('\n')
-
-    return (
-      <CodeContainer>
-        {lines.map((line, index) => (
-          <CodeLine key={index} highlighted={index % 2 === 0}>
-            <LineNumber>{index + 1}</LineNumber>
-            <LineContent>{line}</LineContent>
-          </CodeLine>
-        ))}
-      </CodeContainer>
-    )
   }
 
   return (
@@ -567,6 +590,17 @@ const RAMLExampleGenerator = () => {
                 <FiEdit /> Write/Paste
               </Tab>
             </TabGroup>
+
+            {inputContent &&
+              (isFileUploading ? (
+                <LoadingButton>
+                  <LoadingButtonSpinner></LoadingButtonSpinner>
+                </LoadingButton>
+              ) : (
+                <ConvertButton onClick={handleSubmit}>
+                  <FiSendNoMargin />
+                </ConvertButton>
+              ))}
           </TabContainer>
           {activeTab === 'paste' && (
             <ConversionTip>
@@ -579,8 +613,9 @@ const RAMLExampleGenerator = () => {
               type="file"
               ref={fileInputRef}
               onChange={handleFileUpload}
+              onClick={(e) => (e.target.value = null)}
               style={{ display: 'none' }}
-              accept=".xsd"
+              accept=".yaml"
             />
             {activeTab === 'upload' ? (
               <UploadArea onClick={() => fileInputRef.current?.click()}>
@@ -588,17 +623,11 @@ const RAMLExampleGenerator = () => {
                 <p>Drop your datatype file here or click to upload</p>
               </UploadArea>
             ) : (
-              // <TextArea
-              //   value={inputContent}
-              //   onChange={(e) => setInputContent(e.target.value)}
-              //   placeholder="Write or paste your XSD content here..."
-              // />
-              // <div className="w-full h-full rounded-2xl overflow-hidden">
               <Editor
                 height="100%"
                 defaultLanguage="yaml"
                 theme="vs-light"
-                // value={JSON.stringify(output, null, 4)}
+                onChange={(value) => setInputContent(value)}
                 options={{
                   fontSize: 16,
                   lineHeight: 1.8,
@@ -610,7 +639,6 @@ const RAMLExampleGenerator = () => {
                   tabSize: 4,
                 }}
               />
-              // </div>
             )}
           </EditorContent>
           {activeTab === 'paste' && (
@@ -628,11 +656,6 @@ const RAMLExampleGenerator = () => {
                   </>
                 )}
               </ConversionStatus>
-              {inputContent && (
-                <ConvertButton onClick={() => convertToRaml(inputContent)}>
-                  <FiCode /> Generate RAML Example
-                </ConvertButton>
-              )}
             </InputActions>
           )}
         </EditorPanel>
@@ -676,7 +699,7 @@ const RAMLExampleGenerator = () => {
                 height="100%"
                 defaultLanguage="yaml"
                 theme="vs-light"
-                // value={JSON.stringify(output, null, 4)}
+                value={JSON.stringify(outputContent, null, 4)}
                 options={{
                   fontSize: 16,
                   lineHeight: 1.8,
