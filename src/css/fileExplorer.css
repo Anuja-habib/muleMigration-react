@@ -1,4 +1,4 @@
-.file-explorer button {
+/* .file-explorer button {
   background-color: #007bff;
   color: white;
   border: none;
@@ -9,15 +9,15 @@
   align-items: center;
   margin-bottom: 10px;
   transition: background-color 0.3s;
-}
+} */
 
-.file-explorer button:hover {
+/* .file-explorer button:hover {
   background-color: #0056b3;
-}
+} */
 
-.file-explorer button svg {
+/* .file-explorer button svg {
   margin-right: 5px;
-}
+} */
 
 .file-explorer .folder {
   display: flex;
