@@ -19,7 +19,6 @@ const RAMLExampleGenerator = () => {
   const [outputContent, setOutputContent] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('upload')
   const fileInputRef = React.useRef(null)
 
