@@ -1,7 +1,4 @@
-import React, { useState } from 'react'
-import styled, { keyframes } from 'styled-components'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import React, { useState, useRef, useEffect } from 'react'
 import {
   FiUploadCloud,
   FiCopy,
@@ -17,451 +14,26 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import config from '../config/config'
 import Editor from '@monaco-editor/react'
 
-const FiSendNoMargin = styled(FiSend)`
-  margin-right: 0;
-`
-
-const PageContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
-`
-
-const DescriptionSection = styled.div`
-  background: linear-gradient(135deg, #4a46cc, #0b1b42);
-  border-radius: 16px;
-  padding: 32px;
-  margin-bottom: 32px;
-  color: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-`
-
-const Title = styled.h1`
-  margin: 0 0 16px 0;
-  font-size: 32px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  letter-spacing: -0.5px;
-
-  svg {
-    font-size: 36px;
-  }
-`
-
-const Description = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  margin-top: 24px;
-`
-
-const FeatureCard = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  padding: 24px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-
-  h3 {
-    font-size: 18px;
-    margin: 0 0 12px 0;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  p {
-    margin: 0;
-    font-size: 14px;
-    opacity: 0.9;
-    line-height: 1.6;
-  }
-`
-
-const ContentContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 24px;
-
-  @media (max-width: 992px) {
-    grid-template-columns: 1fr;
-  }
-`
-
-const EditorPanel = styled.div`
-  background: white;
-  border: 1px solid #e1e4e8;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.2s ease;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 600px;
-
-  &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  }
-`
-
-const EditorContent = styled.div`
-  flex: 1;
-  overflow: auto;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-`
-
-const PanelHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  background: #f8f9fa;
-  border-bottom: 1px solid #e1e4e8;
-`
-
-const PanelTitle = styled.h3`
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #24292e;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`
-
-const StatusIndicator = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: ${(props) => (props.error ? '#cb2431' : '#28a745')};
-  margin-left: 12px;
-
-  svg {
-    font-size: 14px;
-  }
-`
-
-const ActionButtons = styled.div`
-  display: flex;
-  gap: 8px;
-`
-
-const IconButton = styled.button`
-  display: flex;
-  align-items: center;
-  padding: 6px 12px;
-  border: 1px solid #e1e4e8;
-  border-radius: 6px;
-  background: white;
-  color: #586069;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    background: #f3f4f6;
-    border-color: #bbb;
-    color: #24292e;
-  }
-
-  &:active {
-    background: #e1e4e8;
-  }
-
-  svg {
-    margin-right: 6px;
-  }
-`
-
-const UploadArea = styled.div`
-  padding: 40px;
-  border: 2px dashed #e1e4e8;
-  border-radius: 6px;
-  margin: 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  padding: 40px;
-  border: 2px dashed #e1e4e8;
-  border-radius: 6px;
-  margin: 16px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  height: 100%;
-
-  &:hover {
-    border-color: #0366d6;
-    background: #f6f8fa;
-  }
-`
-
-const TextArea = styled.textarea`
-  width: 100%;
-  flex: 1;
-  padding: 16px;
-  border: none;
-  resize: none;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #24292e;
-  background: #fafbfc;
-
-  &:focus {
-    outline: none;
-    background: white;
-  }
-`
-
-const ConvertButton = styled(IconButton)`
-  background: #3430af;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(74, 70, 204, 0.2);
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
-
-  &:hover {
-    background: #3830af;
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(74, 70, 204, 0.3);
-
-    &:before {
-      opacity: 1;
-    }
-  }
-
-  &:active {
-    background: #353299;
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(74, 70, 204, 0.2);
-  }
-
-  svg {
-    font-size: 18px;
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    justify-content: center;
-  }
-`
-
-const CodeViewer = styled.div`
-  background: white;
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    SF Mono,
-    Menlo,
-    Consolas,
-    Liberation Mono,
-    monospace;
-  font-size: 12px;
-  line-height: 20px;
-  overflow: auto;
-  height: 100%;
-`
-
-const CodeContainer = styled.div`
-  display: table;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  border-spacing: 0;
-`
-
-const CodeLine = styled.div`
-  display: table-row;
-  background: ${(props) => (props.highlighted ? '#f6f8fa' : 'transparent')};
-
-  &:hover {
-    background: #f6f8fa;
-  }
-`
-
-const LineNumber = styled.div`
-  display: table-cell;
-  padding: 0 10px;
-  width: 50px;
-  min-width: 50px;
-  color: #6e7781;
-  text-align: right;
-  user-select: none;
-  border-right: 1px solid #d0d7de;
-  background: #f6f8fa;
-`
-
-const LineContent = styled.div`
-  display: table-cell;
-  padding: 0 10px;
-  white-space: pre;
-  color: #24292f;
-`
-
-const LoadingSpinner = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 400px;
-  color: #586069;
-`
-
-const TabContainer = styled.div`
-  display: flex;
-  padding: 12px 16px;
-  background: #f6f8fa;
-  border-bottom: 1px solid #e1e4e8;
-  justify-content: space-between;
-`
-
-const TabGroup = styled.div`
-  display: flex;
-  background: #edf0f3;
-  padding: 4px;
-  border-radius: 30px;
-`
-
-const Tab = styled.button`
-  padding: 8px 16px;
-  background: ${(props) => (props.active ? '#4a46cc' : 'transparent')};
-  border: none;
-  border-radius: 20px;
-  color: ${(props) => (props.active ? 'white' : '#586069')};
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-  min-width: 130px;
-  justify-content: center;
-
-  &:hover {
-    background: ${(props) => (props.active ? '#4a46cc' : '#e1e4e8')};
-    color: ${(props) => (props.active ? 'white' : '#24292e')};
-  }
-
-  svg {
-    font-size: 16px;
-  }
-`
-
-const InputActions = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background: #f8f9fa;
-  border-top: 1px solid #e1e4e8;
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  backdrop-filter: blur(8px);
-`
-
-const ConversionStatus = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #6a737d;
-  font-size: 14px;
-
-  svg {
-    color: #4a46cc;
-    font-size: 16px;
-  }
-`
-
-const ConversionTip = styled.div`
-  padding: 12px 20px;
-  background: #f1f8ff;
-  border-bottom: 1px solid #e1e4e8;
-  color: #24292e;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  svg {
-    color: #0366d6;
-    font-size: 16px;
-  }
-`
-
-const LoadingButton = styled.div`
-  background: #3430af;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(74, 70, 204, 0.2);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: default;
-  overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-`
-
-const LoadingButtonSpinner = styled.div`
-  width: 16px;
-  height: 16px;
-  border: 2px solid transparent;
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.4s linear infinite;
-`
-
 const RAMLExampleGenerator = () => {
-  const [inputContent, setInputContent] = useState('')
-  const [outputContent, setOutputContent] = useState('')
+  const [inputContent, setInputContent] = useState()
+  const [outputContent, setOutputContent] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('upload')
   const fileInputRef = React.useRef(null)
-  const [isFileUploading, setIsFileUploading] = useState(true)
+
+  const editorRef = useRef(null)
+
+  const handleEditorDidMount = (editor) => {
+    editorRef.current = editor
+  }
+
+  useEffect(() => {
+    if (activeTab === 'paste' && editorRef.current) {
+      editorRef.current.layout()
+    }
+  }, [activeTab])
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0]
@@ -473,9 +45,6 @@ const RAMLExampleGenerator = () => {
       }
       reader.readAsText(file)
       console.log(inputContent)
-      setTimeout(function () {
-        setIsFileUploading(false)
-      }, 1000)
     }
   }
 
@@ -493,7 +62,9 @@ const RAMLExampleGenerator = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt: content }),
+        body: JSON.stringify({
+          prompt: content,
+        }),
       })
 
       if (!response.ok) {
@@ -510,7 +81,12 @@ const RAMLExampleGenerator = () => {
   }
 
   const handleDownload = (content, filename) => {
-    const blob = new Blob([content], { type: 'text/plain' })
+    const dataToDownload = typeof content === 'string' ? content : JSON.stringify(content, null, 4)
+
+    const blob = new Blob([dataToDownload], {
+      type: 'application/json',
+    })
+
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url
@@ -521,114 +97,151 @@ const RAMLExampleGenerator = () => {
     URL.revokeObjectURL(url)
   }
 
-  const handleCopy = (content) => {
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
   return (
-    <PageContainer>
-      <DescriptionSection>
-        <Title>
-          <FiCode /> RAML Example Generator
-        </Title>
+    <div className="max-w-[1200px] mx-auto p-6">
+      <div className="bg-gradient-to-br from-[#4a46cc] to-[#0b1b42] rounded-2xl p-8 mb-8 text-white shadow-[0_4px_20px_rgba(0,0,0,0.1)]">
+        <h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-semibold flex items-center gap-3 tracking-[-0.5px]">
+          <FiCode className="text-2xl sm:text-3xl" />
+          RAML Example Generator
+        </h1>
         <p>Generate RAML examples for the provided DataType.</p>
 
-        <Description>
-          <FeatureCard>
-            <h3>
-              <FiUploadCloud /> Easy Upload
+        <div className="flex flex-col md:flex-row gap-6 mt-6">
+          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
+            <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
+              <FiUploadCloud />
+              Easy Upload
             </h3>
-            <p>
+            <p className="text-sm opacity-90 leading-relaxed m-0">
               Drag and drop your datatype files or paste content directly. Supports single and
               multiple schema files with automatic validation.
             </p>
-          </FeatureCard>
+          </div>
 
-          <FeatureCard>
-            <h3>
-              <FiCode /> Smart Generation
+          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
+            <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
+              <FiCode />
+              Smart Generation
             </h3>
-            <p>
+            <p className="text-sm opacity-90 leading-relaxed m-0">
               Automatically generates data type structures into clean, well-formatted RAML examples
               with intelligent type mapping and examples.
             </p>
-          </FeatureCard>
+          </div>
 
-          <FeatureCard>
-            <h3>
-              <FiDownload /> Instant Export
+          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
+            <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
+              <FiDownload />
+              Instant Export
             </h3>
-            <p>
+            <p className="text-sm opacity-90 leading-relaxed m-0">
               Download your converted RAML example instantly or copy to clipboard. Includes syntax
               highlighting and validation for perfect API specifications.
             </p>
-          </FeatureCard>
-        </Description>
-      </DescriptionSection>
+          </div>
+        </div>
+      </div>
 
-      <ContentContainer>
-        <EditorPanel>
-          <PanelHeader>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <PanelTitle>
+      <div className="flex flex-col lg:flex-row gap-6 mt-6">
+        <div className="w-full bg-white border border-[#e1e4e8] rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.05)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex flex-col h-[600px]">
+          <div className="flex items-center justify-between px-5 py-4 bg-[#f8f9fa] border-b border-[#e1e4e8]">
+            <div className="flex items-center">
+              <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
                 <FiCode /> Input Datatype
-              </PanelTitle>
+              </h3>
             </div>
-            <ActionButtons>
-              <IconButton onClick={() => setInputContent('')}>
-                <MdContentPaste /> Clear
-              </IconButton>
-            </ActionButtons>
-          </PanelHeader>
-          <TabContainer>
-            <TabGroup>
-              <Tab active={activeTab === 'upload'} onClick={() => setActiveTab('upload')}>
-                <FiUploadCloud /> Upload File
-              </Tab>
-              <Tab active={activeTab === 'paste'} onClick={() => setActiveTab('paste')}>
-                <FiEdit /> Write/Paste
-              </Tab>
-            </TabGroup>
+            <div className="flex gap-2">
+              <div
+                className="flex gap-1 items-center px-3 py-1.5 border border-[#e1e4e8] rounded-md bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]"
+                onClick={() => setInputContent('')}
+              >
+                <MdContentPaste /> <span>Clear</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between px-4 py-3 bg-[#f6f8fa] border-b border-[#e1e4e8]">
+            <div className="flex bg-[#edf0f3] p-1 rounded-full">
+              <div className="flex bg-[#edf0f3] rounded-full">
+                <button
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all duration-200 min-w-[130px] justify-center 
+      ${activeTab === 'upload' ? 'bg-[#4a46cc] text-white scale-105' : 'bg-transparent text-[#586069]'}
+  `}
+                  onClick={() => setActiveTab('upload')}
+                >
+                  <FiUploadCloud /> Upload File
+                </button>
+                <button
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all duration-200 min-w-[130px] justify-center 
+      ${activeTab === 'paste' ? 'bg-[#4a46cc] text-white scale-105' : 'bg-transparent text-[#586069]'}
+      `}
+                  onClick={() => setActiveTab('paste')}
+                >
+                  <FiEdit /> Write/Paste
+                </button>
+              </div>
+            </div>
 
-            {inputContent &&
-              (isFileUploading ? (
-                <LoadingButton>
-                  <LoadingButtonSpinner></LoadingButtonSpinner>
-                </LoadingButton>
-              ) : (
-                <ConvertButton onClick={handleSubmit}>
-                  <FiSendNoMargin />
-                </ConvertButton>
-              ))}
-          </TabContainer>
+            {inputContent && (
+              <button
+                className="relative bg-green-600  text-white p-4 text-sm font-semibold rounded-full  hover:bg-green-800 hover:text-white hover:translate-y-[-1px] hover:shadow-[0_4px_8px_rgba(74,70,204,0.3)] w-auto flex items-center justify-center gap-2.5 overflow-hidden transition-all duration-200 ease-in-out cursor-pointer"
+                onClick={handleSubmit}
+              >
+                <FiSend /> Send
+              </button>
+            )}
+          </div>
           {activeTab === 'paste' && (
-            <ConversionTip>
-              <FiCode /> Write or paste your datatype content below and click Convert to generate
-              RAML example
-            </ConversionTip>
+            <div className="py-3 px-5 bg-[#f1f8ff] border-b border-[#e1e4e8] text-[#24292e] text-[14px] flex items-center gap-2">
+              <FiCode /> Write or paste your datatype content below
+            </div>
           )}
-          <EditorContent>
+          <div className="flex-1 overflow-auto relative flex flex-col">
             <input
               type="file"
               ref={fileInputRef}
               onChange={handleFileUpload}
               onClick={(e) => (e.target.value = null)}
-              style={{ display: 'none' }}
+              className="hidden"
               accept=".yaml"
             />
             {activeTab === 'upload' ? (
-              <UploadArea onClick={() => fileInputRef.current?.click()}>
+              <div
+                className={`p-10 border-2 border-dashed rounded-md m-4 text-center cursor-pointer transition-all duration-200 flex flex-col items-center gap-5 h-full
+                ${inputContent ? 'border-green-500 bg-green-50 hover:border-green-600' : 'border-[#e1e4e8] hover:border-[#0366d6] hover:bg-[#f6f8fa]'}`}
+                onClick={() => fileInputRef.current?.click()}
+              >
                 <FiUploadCloud size={48} color="#586069" />
                 <p>Drop your datatype file here or click to upload</p>
-              </UploadArea>
+                {inputContent && (
+                  <span className="text-green-600 font-medium mt-2 flex items-center gap-2">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-green-500"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414L8.414 15 4 10.586a1 1 0 011.414-1.414L8.414 12.172l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    File loaded successfully!
+                  </span>
+                )}
+              </div>
             ) : (
               <Editor
                 height="100%"
                 defaultLanguage="yaml"
                 theme="vs-light"
+                value={inputContent}
                 onChange={(value) => setInputContent(value)}
+                onMount={(editor) => handleEditorDidMount(editor)}
                 options={{
+                  tabSize: 4,
+                  insertSpaces: true,
+                  detectIndentation: false,
                   fontSize: 16,
                   lineHeight: 1.8,
                   fontFamily: "'Fira Code', monospace",
@@ -636,64 +249,103 @@ const RAMLExampleGenerator = () => {
                   wordWrap: 'on',
                   lineNumbers: 'on',
                   cursorStyle: 'line',
-                  tabSize: 4,
                 }}
               />
             )}
-          </EditorContent>
+          </div>
           {activeTab === 'paste' && (
-            <InputActions>
-              <ConversionStatus>
+            <div className="flex justify-between items-center py-4 px-5 bg-[#f8f9fa] border-t border-[#e1e4e8] sticky bottom-0 left-0 right-0 z-10 backdrop-blur-[8px]">
+              <div className="flex items-center gap-2 text-[#6a737d] text-[14px]">
                 {inputContent ? (
                   <>
-                    <FiCheckCircle />
+                    <FiCheckCircle size={16} color="4a46cc" />
                     Ready to convert
                   </>
                 ) : (
                   <>
-                    <FiEdit />
+                    <FiEdit size={16} color="4a46cc" />
                     Start writing or paste your datatype content
                   </>
                 )}
-              </ConversionStatus>
-            </InputActions>
+              </div>
+            </div>
           )}
-        </EditorPanel>
+        </div>
 
-        <EditorPanel>
-          <PanelHeader>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <PanelTitle>
+        <div className="w-full bg-white border border-[#e1e4e8] rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.05)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex flex-col h-[600px]">
+          <div className="flex items-center justify-between py-4 px-5 bg-white border-b border-[#e1e4e8]">
+            <div className="flex items-center gap-4">
+              <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
                 <FiCode /> Output RAML
-              </PanelTitle>
+              </h3>
               {error ? (
-                <StatusIndicator error>
-                  <FiAlertCircle /> Generation failed
-                </StatusIndicator>
+                <div className="flex items-center gap-1 text-[12px]">
+                  <FiAlertCircle />
+                  <span className={true ? 'text-red-800' : 'text-green-800'}>
+                    Generation failed
+                  </span>
+                </div>
               ) : (
                 outputContent && (
-                  <StatusIndicator>
-                    <FiCheckCircle /> Generation successful
-                  </StatusIndicator>
+                  <div className="flex items-center gap-1 text-[12px] ml-3">
+                    <FiCheckCircle />
+                    <span className={error ? 'text-red-800' : 'text-green-800'}>
+                      Generation successful
+                    </span>
+                  </div>
                 )
               )}
             </div>
-            <ActionButtons>
-              <CopyToClipboard text={outputContent} onCopy={handleCopy}>
-                <IconButton>
-                  <FiCopy /> {copied ? 'Copied!' : 'Copy'}
-                </IconButton>
+            <div className="flex gap-2">
+              <CopyToClipboard
+                text={
+                  typeof outputContent === 'string'
+                    ? outputContent
+                    : JSON.stringify(outputContent, null, 4)
+                }
+              >
+                <button className="flex items-center px-3 py-1.5 border border-[#e1e4e8] rounded-[6px] bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]">
+                  <FiCopy />
+                </button>
               </CopyToClipboard>
-              <IconButton onClick={() => handleDownload(outputContent, 'converted.raml')}>
-                <FiDownload /> Download
-              </IconButton>
-            </ActionButtons>
-          </PanelHeader>
-          <CodeViewer>
+              <button
+                className="flex gap-1 items-center px-3 py-1.5 border border-[#e1e4e8] rounded-[6px] bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]"
+                onClick={() => handleDownload(outputContent, 'converted.json')}
+              >
+                <FiDownload /> <span>Download</span>
+              </button>
+            </div>
+          </div>
+          <div className="bg-white font-mono text-[12px] leading-[20px] overflow-auto h-full">
             {isLoading ? (
-              <LoadingSpinner>Generating...</LoadingSpinner>
+              <div className="flex items-center justify-center h-full">
+                <svg
+                  aria-hidden="true"
+                  className="w-8 h-8 text-gray-200 animate-spin dark:text-white fill-indigo-600"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="currentFill"
+                  />
+                </svg>
+                <span className="sr-only">Loading...</span>
+              </div>
             ) : error ? (
-              <div style={{ padding: '16px', color: '#cb2431' }}>{error}</div>
+              <div
+                style={{
+                  padding: '16px',
+                  color: '#cb2431',
+                }}
+              >
+                {error}
+              </div>
             ) : (
               <Editor
                 height="100%"
@@ -712,10 +364,10 @@ const RAMLExampleGenerator = () => {
                 }}
               />
             )}
-          </CodeViewer>
-        </EditorPanel>
-      </ContentContainer>
-    </PageContainer>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
