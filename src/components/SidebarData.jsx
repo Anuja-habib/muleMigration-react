@@ -106,6 +106,11 @@ export const SidebarData = [
         path: '/generate',
         icon: <IoIcons.IoMdHelpCircle style={iconStyle} />,
       },
+      {
+        title: 'Feedback',
+        path: '/feedback',
+        icon: <IoIcons.IoMdHelpCircle style={iconStyle} />,
+      },
     ],
   },
 ]
