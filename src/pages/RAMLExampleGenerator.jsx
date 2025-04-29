@@ -13,6 +13,7 @@ import { MdContentPaste } from 'react-icons/md'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import config from '../config/config'
 import Editor from '@monaco-editor/react'
+import yaml from 'js-yaml'
 
 const RAMLExampleGenerator = () => {
   const [inputContent, setInputContent] = useState()
@@ -70,8 +71,21 @@ const RAMLExampleGenerator = () => {
         throw new Error('Conversion failed')
       }
 
+      let parsedResult
+
       const data = await response.json()
-      setOutputContent(JSON.parse(data.result))
+
+      try {
+        parsedResult = JSON.parse(data.result)
+      } catch (jsonError) {
+        try {
+          parsedResult = yaml.load(data.result)
+        } catch (yamlError) {
+          parsedResult = data.result
+        }
+      }
+
+      setOutputContent(parsedResult)
     } catch (err) {
       setError(err.message)
     } finally {
