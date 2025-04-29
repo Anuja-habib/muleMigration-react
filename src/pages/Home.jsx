@@ -13,126 +13,6 @@ import { IoMdTrendingUp } from 'react-icons/io'
 import styled from 'styled-components'
 import imgDiv from '../assets/backgroundImage.webp'
 
-// Main container
-const PageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #f8f9fa;
-`
-
-// Two-column layout like Anypoint Platform
-const ContentSection = styled.section`
-  padding: 40px 16px;
-  flex: 1 0 auto;
-`
-
-const ContentContainer = styled.div`
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
-
-  @media (max-width: 992px) {
-    grid-template-columns: 1fr;
-  }
-`
-
-const LeftColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-`
-
-const RightColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  height: 100%;
-`
-
-// Card components
-const SectionContainer = styled.div`
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-`
-
-const SectionHeader = styled.header`
-  display: flex;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid #eee;
-
-  svg {
-    color: #009de2;
-    font-size: 20px;
-    margin-right: 8px;
-  }
-
-  span {
-    font-size: 16px;
-    font-weight: 500;
-    color: #333;
-  }
-`
-
-const MainTools = styled.div`
-  padding: 0;
-`
-
-const ToolLink = styled(Link)`
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  text-decoration: none;
-  color: inherit;
-  border-bottom: 1px solid #f0f0f0;
-  transition: background-color 0.2s;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  &:hover {
-    background-color: #f8f9fa;
-  }
-`
-
-const ToolIconContainer = styled.div`
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 16px;
-
-  svg {
-    font-size: 24px;
-    color: #009de2;
-  }
-`
-
-const ToolContent = styled.div`
-  flex: 1;
-`
-
-const ToolTitle = styled.span`
-  display: block;
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  margin-bottom: 4px;
-`
-
-const ToolDescription = styled.span`
-  display: block;
-  font-size: 14px;
-  color: #666;
-`
-
 const newFeatures = [
   {
     title: 'DataWeave Script Generator',
@@ -142,7 +22,6 @@ const newFeatures = [
 ]
 
 const Home = () => {
-  // Featured tools with descriptions
   const featuredTools = [
     {
       title: 'RAML Example Generator',
@@ -181,74 +60,94 @@ const Home = () => {
   ]
 
   return (
-    <PageContainer>
+    <div className="flex flex-col min-h-screen bg-[#f8f9fa]">
       <Banner />
 
-      <ContentSection>
-        <ContentContainer>
-          {/* Left Column - Featured Tools */}
-          <LeftColumn>
-            <SectionContainer>
-              <SectionHeader>
-                <MdFeaturedPlayList />
-                <span>Trending Features</span>
-              </SectionHeader>
+      <div className="flex flex-col md:flex-row md:min-w-xl lg:min-w-5xl xl:min-w-7xl gap-4 mx-auto p-4">
+        <div className="flex-[2] w-full">
+          <div className="bg-white rounded shadow-sm overflow-hidden">
+            <div className="flex items-center px-5 py-4 border-b border-[#eee] gap-2">
+              <MdFeaturedPlayList color="#009de2" size={20} />
+              <span className="text-lg font-medium text-[#333333]">Trending Features</span>
+            </div>
 
-              <MainTools>
-                {featuredTools.map((tool, index) => (
-                  <ToolLink to={tool.path} key={index}>
-                    <ToolIconContainer>{tool.icon}</ToolIconContainer>
-                    <ToolContent>
-                      <ToolTitle>{tool.title}</ToolTitle>
-                      <ToolDescription>{tool.description}</ToolDescription>
-                    </ToolContent>
-                  </ToolLink>
-                ))}
-              </MainTools>
-            </SectionContainer>
-          </LeftColumn>
+            <div className="w-full">
+              {featuredTools.map((tool, index) => (
+                <div
+                  to={tool.path}
+                  key={index}
+                  className="flex items-center p-5 no-underline text-inherit border-b border-[#f0f0f0] last:border-b-0 hover:bg-[#f8f9fa] transition-colors duration-200 cursor-pointer"
+                >
+                  <div className="p-4 flex items-center justify-center">
+                    <div className="text-[#009de2] text-[24px]">{tool.icon}</div>
+                  </div>
+                  <div>
+                    <span className="block text-base font-medium text-[#333] mb-1">
+                      {tool.title}
+                    </span>
+                    <span className="block text-sm text-[#666]">{tool.description}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
-          {/* Right Column - Migration Tools */}
-          <RightColumn>
-            <SectionContainer>
-              <SectionHeader>
-                <IoMdTrendingUp />
-                <span>Migration Tools</span>
-              </SectionHeader>
+        <div className="flex-[1] flex flex-col gap-4 w-full">
+          <div className="bg-white rounded shadow-sm overflow-hidden">
+            <div className="flex items-center px-5 py-4 border-b border-[#eee] gap-2">
+              <IoMdTrendingUp color="#009de2" size={20} />
+              <span className="text-lg font-medium text-[#333333]">Migration Tools</span>
+            </div>
 
-              <MainTools>
-                {migrationTools.map((tool, index) => (
-                  <ToolLink to={tool.path} key={index}>
-                    <ToolIconContainer>{tool.icon}</ToolIconContainer>
-                    <ToolContent>
-                      <ToolTitle>{tool.title}</ToolTitle>
-                    </ToolContent>
-                  </ToolLink>
-                ))}
-              </MainTools>
-            </SectionContainer>
+            <div className="w-full">
+              {migrationTools.map((tool, index) => (
+                <Link
+                  to={tool.path}
+                  key={index}
+                  className="flex items-center p-5 no-underline text-inherit border-b border-[#f0f0f0] last:border-b-0 hover:bg-[#f8f9fa] transition-colors duration-200 cursor-pointer"
+                >
+                  <div className="p-4 flex items-center justify-center mr-4">
+                    <div className="text-[#009de2] text-[24px]">{tool.icon}</div>
+                  </div>
+                  <div>
+                    <span className="block text-base font-medium text-[#333] mb-1">
+                      {tool.title}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
 
-            <SectionContainer>
-              <SectionHeader>
-                <FaIcons.FaCode />
-                <span>New Feature</span>
-              </SectionHeader>
+          <div className="bg-white rounded shadow-sm overflow-hidden">
+            <div className="flex items-center px-5 py-4 border-b border-[#eee] gap-2">
+              <FaIcons.FaCode color="#009de2" size={20} />
+              <span className="text-lg font-medium text-[#333333]">New Feature</span>
+            </div>
 
-              <MainTools>
-                {newFeatures.map((tool, index) => (
-                  <ToolLink to={tool.path} key={index}>
-                    <ToolIconContainer>{tool.icon}</ToolIconContainer>
-                    <ToolContent>
-                      <ToolTitle>{tool.title}</ToolTitle>
-                    </ToolContent>
-                  </ToolLink>
-                ))}
-              </MainTools>
-            </SectionContainer>
-          </RightColumn>
-        </ContentContainer>
-      </ContentSection>
-    </PageContainer>
+            <div>
+              {newFeatures.map((tool, index) => (
+                <Link
+                  to={tool.path}
+                  key={index}
+                  className="flex items-center p-5 no-underline text-inherit border-b border-[#f0f0f0] last:border-b-0 hover:bg-[#f8f9fa] transition-colors duration-200 cursor-pointer"
+                >
+                  <div className="p-4 flex items-center justify-center mr-4">
+                    <div className="text-[#009de2] text-[24px]">{tool.icon}</div>
+                  </div>
+                  <div>
+                    <span className="block text-base font-medium text-[#333] mb-1">
+                      {tool.title}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
