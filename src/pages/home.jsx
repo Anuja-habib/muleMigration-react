@@ -73,7 +73,7 @@ const Home = () => {
 
             <div className="w-full">
               {featuredTools.map((tool, index) => (
-                <div
+                <Link
                   to={tool.path}
                   key={index}
                   className="flex items-center p-5 no-underline text-inherit border-b border-[#f0f0f0] last:border-b-0 hover:bg-[#f8f9fa] transition-colors duration-200 cursor-pointer"
@@ -87,7 +87,7 @@ const Home = () => {
                     </span>
                     <span className="block text-sm text-[#666]">{tool.description}</span>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

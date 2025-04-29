@@ -85,6 +85,7 @@ const RAMLExampleGenerator = () => {
         }
       }
 
+      console.log(parsedResult)
       setOutputContent(parsedResult)
     } catch (err) {
       setError(err.message)
@@ -364,7 +365,7 @@ const RAMLExampleGenerator = () => {
                 height="100%"
                 defaultLanguage="yaml"
                 theme="vs-light"
-                value={JSON.stringify(outputContent, null, 4)}
+                value={outputContent}
                 options={{
                   fontSize: 16,
                   lineHeight: 1.8,

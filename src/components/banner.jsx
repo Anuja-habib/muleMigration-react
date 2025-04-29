@@ -64,22 +64,36 @@ export const Banner = () => {
   )
 }
 
-// export const SmallBanner = ({ title, subtitle }) => {
-//   return (
-//     <BannerContainer style={{ height: '140px' }}>
-//       <BackgroundGraphics />
-//       <BannerContent
-//         style={{
-//           left: '0',
-//           width: '100%',
-//           textAlign: 'center',
-//           alignItems: 'center',
-//           padding: '0 24px',
-//         }}
-//       >
-//         <BannerTitle style={{ fontSize: '32px' }}>{title}</BannerTitle>
-//         <BannerText>{subtitle}</BannerText>
-//       </BannerContent>
-//     </BannerContainer>
-//   )
-// }
+export const SmallBanner = ({ title, subtitle }) => {
+  return (
+    <div
+      className="h-[180px] bg-gradient-to-r from-[#4a46cc] to-[#0b1b42] relative overflow-hidden md:h-[180px] sm:h-[140px]"
+      style={{ height: '140px' }}
+    >
+      <div
+        className="absolute top-0 right-0 bottom-0 w-[60%] bg-cover opacity-20 hidden lg:block"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='800' height='400' viewBox='0 0 800 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,400 C150,300 350,300 500,400 C650,300 750,300 800,400 L800,0 L0,0 L0,400 Z' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E")`,
+        }}
+      ></div>
+      <div
+        className="absolute left-[220px] top-0 w-[calc(100%-220px)] h-full flex flex-col justify-center pr-[72px] 
+text-white md:pr-[40px] sm:left-0 sm:w-full sm:px-6 sm:items-center sm:text-center sm:h-auto"
+        style={{
+          left: '0',
+          width: '100%',
+          textAlign: 'center',
+          alignItems: 'center',
+          padding: '0 24px',
+        }}
+      >
+        <h1 className="w-4/5 mx-auto text-2xl md:text-3xl lg:text-4xl font-medium text-center">
+          {title}
+        </h1>
+        <p className="w-3/4 mx-auto text-md font-normal text-center opacity-90 m-0 leading-[1.5] sm:text-[16px]">
+          {subtitle}
+        </p>
+      </div>
+    </div>
+  )
+}
