@@ -63,7 +63,7 @@ const Home = () => {
     <div className="flex flex-col min-h-screen bg-[#f8f9fa]">
       <Banner />
 
-      <div className="flex flex-col md:flex-row md:min-w-xl lg:min-w-5xl xl:min-w-7xl gap-4 mx-auto p-4">
+      <div className="flex flex-col md:flex-row md:min-w-xl lg:min-w-5xl xl:min-w-7xl gap-4 mx-auto p-4 py-10">
         <div className="flex-[2] w-full">
           <div className="bg-white rounded shadow-sm overflow-hidden">
             <div className="flex items-center px-5 py-4 border-b border-[#eee] gap-2">
