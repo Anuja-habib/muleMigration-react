@@ -100,10 +100,10 @@ const WsdlToRaml = () => {
         unescapedType = unescapeString(unescapedType)
 
         const typeKey = fileName.replace('.raml', '')
-        const inlinedType = `\n  ${typeKey}:\n${unescapedType
+        const inlinedType = `\n    ${typeKey}:\n${unescapedType
           .split('\n')
           .slice(1)
-          .map((l) => '    ' + l)
+          .map((l) => '        ' + l)
           .join('\n')}`
 
         const includeTag = `!include dataTypes/${fileName}`
