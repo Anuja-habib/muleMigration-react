@@ -1,6 +1,5 @@
-import { react } from 'react'
-
 const config = {
-  apiUrlPython: 'https://migration-accelerator-server-a32399b22dff.herokuapp.com/',
+
+  apiUrlPython: import.meta.env.VITE_PYTHON_APP_API_URL,
 }
 export default config

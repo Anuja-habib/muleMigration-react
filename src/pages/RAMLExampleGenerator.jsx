@@ -15,13 +15,12 @@ import config from '../config/config'
 import Editor from '@monaco-editor/react'
 import yaml from 'js-yaml'
 
-const XsdToTaml = () => {
+const RAMLExampleGenerator = () => {
   const [inputContent, setInputContent] = useState()
   const [outputContent, setOutputContent] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState('upload')
-  const [inputContentText, setInputContentText] = useState()
   const fileInputRef = React.useRef(null)
 
   const editorRef = useRef(null)
@@ -30,64 +29,63 @@ const XsdToTaml = () => {
     editorRef.current = editor
   }
 
-  const readFile = (file) => {
-    console.log(file)
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        setInputContentText(e.target.result)
-      }
-      reader.readAsText(file)
-    }
-  }
-
   useEffect(() => {
     if (activeTab === 'paste' && editorRef.current) {
       editorRef.current.layout()
     }
+  }, [activeTab])
 
-    if (inputContentText && inputContentText.length > 0) {
-      const file = new File([inputContentText], 'temp', { type: 'application/xml' })
-      setInputContent(file)
-    }
-  }, [activeTab, inputContentText])
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0]
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0]
+    console.log(file)
     if (file) {
-      setInputContent(file)
-      readFile(file)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setInputContent(e.target.result)
+      }
+      reader.readAsText(file)
+      console.log(inputContent)
     }
   }
 
   const handleSubmit = () => {
-    convertToRaml()
+    generateRAMLExamples(inputContent)
   }
 
-  const convertToRaml = async () => {
+  const generateRAMLExamples = async (content) => {
     setIsLoading(true)
     setError(null)
 
     try {
-      const formData = new FormData()
-      formData.append('file', inputContent)
-
-      console.log(formData)
-
-      const response = await fetch(config.apiUrlPython + '/xsd-to-raml', {
+      const response = await fetch(config.apiUrlPython + '/generateRamlExample', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: content,
+        }),
       })
-
-      console.log(response)
 
       if (!response.ok) {
         throw new Error('Conversion failed')
       }
 
+      let parsedResult
+
       const data = await response.json()
-      const parsedYAML = yaml.load(data.result)
-      setOutputContent(parsedYAML)
+
+      try {
+        parsedResult = JSON.parse(data.result)
+      } catch (jsonError) {
+        try {
+          parsedResult = yaml.load(data.result)
+        } catch (yamlError) {
+          parsedResult = data.result
+        }
+      }
+
+      setOutputContent(parsedResult)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -117,47 +115,41 @@ const XsdToTaml = () => {
       <div className="bg-gradient-to-br from-[#4a46cc] to-[#0b1b42] rounded-2xl p-8 mb-8 text-white shadow-[0_4px_20px_rgba(0,0,0,0.1)]">
         <h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-semibold flex items-center gap-3 tracking-[-0.5px]">
           <FiCode className="text-2xl sm:text-3xl" />
-          XSD to RAML Converter
+          RAML Example Generator
         </h1>
-        <p>
-          Convert your XSD schema to clean, structured RAML definitions for seamless API
-          documentation and development.
-        </p>
+        <p>Generate RAML examples for the provided DataType.</p>
 
         <div className="flex flex-col md:flex-row gap-6 mt-6">
-          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:translate-y-0.5">
+          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
             <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
               <FiUploadCloud />
               Easy Upload
             </h3>
             <p className="text-sm opacity-90 leading-relaxed m-0">
-              Upload your XSD files with ease — simply drag and drop or paste the content directly.
-              We support both single and multiple schema files with automatic validation to ensure
-              accuracy.
+              Drag and drop your datatype files or paste content directly. Supports single and
+              multiple schema files with automatic validation.
             </p>
           </div>
 
-          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:translate-y-0.5">
+          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
             <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
               <FiCode />
               Smart Generation
             </h3>
             <p className="text-sm opacity-90 leading-relaxed m-0">
-              Our converter automatically generates RAML data type structures from your XSD schema.
-              It ensures a clean, well-formatted RAML output with intelligent type mappings and
-              useful examples to help you get started.
+              Automatically generates data type structures into clean, well-formatted RAML examples
+              with intelligent type mapping and examples.
             </p>
           </div>
 
-          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:translate-y-0.5">
+          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
             <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
               <FiDownload />
               Instant Export
             </h3>
             <p className="text-sm opacity-90 leading-relaxed m-0">
-              Once your XSD is converted to RAML, download the file instantly or copy it to your
-              clipboard. Our tool also provides syntax highlighting and validation to ensure your
-              RAML is API-ready.
+              Download your converted RAML example instantly or copy to clipboard. Includes syntax
+              highlighting and validation for perfect API specifications.
             </p>
           </div>
         </div>
@@ -168,16 +160,13 @@ const XsdToTaml = () => {
           <div className="flex items-center justify-between px-5 py-4 bg-[#f8f9fa] border-b border-[#e1e4e8]">
             <div className="flex items-center">
               <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-                <FiCode /> Input XSD
+                <FiCode /> Input Datatype
               </h3>
             </div>
             <div className="flex gap-2">
               <div
                 className="flex gap-1 items-center px-3 py-1.5 border border-[#e1e4e8] rounded-md bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]"
-                onClick={() => {
-                  setInputContent('')
-                  setInputContentText('')
-                }}
+                onClick={() => setInputContent('')}
               >
                 <MdContentPaste /> <span>Clear</span>
               </div>
@@ -205,7 +194,7 @@ const XsdToTaml = () => {
               </div>
             </div>
 
-            {(inputContent || inputContentText) && (
+            {inputContent && (
               <button
                 className="relative bg-green-600  text-white p-4 text-sm font-semibold rounded-full  hover:bg-green-800 hover:text-white hover:translate-y-[-1px] hover:shadow-[0_4px_8px_rgba(74,70,204,0.3)] w-auto flex items-center justify-center gap-2.5 overflow-hidden transition-all duration-200 ease-in-out cursor-pointer"
                 onClick={handleSubmit}
@@ -226,7 +215,7 @@ const XsdToTaml = () => {
               onChange={handleFileUpload}
               onClick={(e) => (e.target.value = null)}
               className="hidden"
-              accept=".xsd"
+              accept=".yaml"
             />
             {activeTab === 'upload' ? (
               <div
@@ -236,7 +225,7 @@ const XsdToTaml = () => {
               >
                 <FiUploadCloud size={48} color="#586069" />
                 <p>Drop your datatype file here or click to upload</p>
-                {(inputContent || inputContentText) && (
+                {inputContent && (
                   <span className="text-green-600 font-medium mt-2 flex items-center gap-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -257,10 +246,10 @@ const XsdToTaml = () => {
             ) : (
               <Editor
                 height="100%"
-                defaultLanguage="xsd"
+                defaultLanguage="yaml"
                 theme="vs-light"
-                value={inputContentText}
-                onChange={(value) => setInputContentText(value)}
+                value={inputContent}
+                onChange={(value) => setInputContent(value)}
                 onMount={(editor) => handleEditorDidMount(editor)}
                 options={{
                   tabSize: 4,
@@ -362,7 +351,14 @@ const XsdToTaml = () => {
                 <span className="sr-only">Loading...</span>
               </div>
             ) : error ? (
-              <div className="p-4 text-red-600">{error}</div>
+              <div
+                style={{
+                  padding: '16px',
+                  color: '#cb2431',
+                }}
+              >
+                {error}
+              </div>
             ) : (
               <Editor
                 height="100%"
@@ -388,4 +384,4 @@ const XsdToTaml = () => {
   )
 }
 
-export default XsdToTaml
+export default RAMLExampleGenerator

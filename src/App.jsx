@@ -1,8 +1,6 @@
 // App.jsx
 import React, { useState } from 'react'
 import './App.css'
-import Sidebar from './components/Sidebar'
-import GlobalNavigation from './components/GlobalNavigation'
 import ChatBot from './components/ChatBot'
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import { RamlExampleGenarator, RamlTools } from './pages/RamlTools'
@@ -10,12 +8,14 @@ import XsdToRaml from './pages/XsdToRaml'
 import Feedback from './pages/Feedback'
 import { Services, XsltMappingExtractor } from './pages/MappingTools'
 import { IntegrationTools, TibcoIntegrationTools, EventsTwo } from './pages/IntegrationTools'
-import WsdlToRaml from './pages/wsdlToRaml'
+import WsdlToRaml from './pages/WsdlToRaml'
 import Home from './pages/Home'
 import Generate from './pages/Genarate'
-import Footer from './components/Footer'
+import Layout from './components/Layout'
+
 import styled from 'styled-components'
-import SimpleFooter from './components/SimpleFooter'
+
+import RAMLExampleGenerator from './pages/RAMLExampleGenerator'
 
 // Add these styled components
 const AppContainer = styled.div`
@@ -37,17 +37,9 @@ const ChatBotWithNavigation = () => {
 }
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen)
-  }
-
   return (
     <AppContainer>
       <Router>
-        <GlobalNavigation toggleSidebar={toggleSidebar} />
-        <Sidebar isOpen={sidebarOpen} toggle={toggleSidebar} />
         <MainContent>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -68,7 +60,6 @@ function App() {
           </Routes>
           <ChatBotWithNavigation />
         </MainContent>
-        <SimpleFooter />
       </Router>
     </AppContainer>
   )

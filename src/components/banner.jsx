@@ -1,4 +1,3 @@
-// Updated banner.jsx with astro icon restored
 import React from 'react'
 import styled from 'styled-components'
 import bannerImage from '../assets/agentforce-agent-astro.avif'
@@ -56,6 +55,7 @@ const BannerContent = styled.div`
   flex-direction: column;
   justify-content: center;
   padding-right: 72px;
+  color: white;
 
   @media (max-width: 992px) {
     padding-right: 40px;
@@ -67,13 +67,13 @@ const BannerContent = styled.div`
     padding: 0 24px;
     align-items: center;
     text-align: center;
+    height: auto; // Fix height to auto on small screens
   }
 `
 
 const BannerTitle = styled.h1`
   font-size: 42px;
   font-weight: 500;
-  color: white;
   margin: 0 0 12px 0;
   line-height: 1.2;
 
@@ -89,7 +89,6 @@ const BannerTitle = styled.h1`
 const BannerText = styled.p`
   font-size: 18px;
   font-weight: 400;
-  color: white;
   opacity: 0.9;
   margin: 0;
   line-height: 1.5;
