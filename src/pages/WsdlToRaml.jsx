@@ -11,6 +11,9 @@ import {
 } from 'react-icons/fi'
 import { MdContentPaste } from 'react-icons/md'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
+
 import config from '../config/config'
 import Editor from '@monaco-editor/react'
 
@@ -18,7 +21,7 @@ let fileStructure = {
   root: {
     'root-file.raml': '#%RAML 1.0\ntitle: Root File',
   },
-  datatypes: {
+  dataTypes: {
     'file-a1.raml': '#%RAML 1.0\ntitle: File A1',
     'file-a2.raml': '#%RAML 1.0\ntitle: File A2',
   },
@@ -145,21 +148,26 @@ const WsdlToRaml = () => {
     }
   }
 
-  const handleDownload = (content, filename) => {
-    const dataToDownload = typeof content === 'string' ? content : JSON.stringify(content, null, 4)
+  const handleDownload = async () => {
+    const zip = new JSZip()
+    const baseFolder = zip.folder('OrderProcessingService')
 
-    const blob = new Blob([dataToDownload], {
-      type: 'application/json',
-    })
+    for (const [name, content] of Object.entries(files.root)) {
+      baseFolder.file(name, content)
+    }
 
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = filename
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
+    const dataTypesFolder = baseFolder.folder('dataTypes')
+    for (const [name, content] of Object.entries(files.dataTypes)) {
+      dataTypesFolder.file(name, content)
+    }
+
+    const examplesFolder = baseFolder.folder('examples')
+    for (const [name, content] of Object.entries(files.examples)) {
+      examplesFolder.file(name, content)
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob' })
+    saveAs(blob, 'OrderProcessingService.zip')
   }
 
   return (
@@ -370,9 +378,9 @@ const WsdlToRaml = () => {
             <div className="flex gap-2">
               <CopyToClipboard
                 text={
-                  typeof outputContent === 'string'
-                    ? outputContent
-                    : JSON.stringify(outputContent, null, 4)
+                  typeof getActiveContent() === 'string'
+                    ? getActiveContent()
+                    : JSON.stringify(getActiveContent(), null, 4)
                 }
               >
                 <button className="flex items-center px-3 py-1.5 border border-[#e1e4e8] rounded-[6px] bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]">
@@ -381,7 +389,7 @@ const WsdlToRaml = () => {
               </CopyToClipboard>
               <button
                 className="flex gap-1 items-center px-3 py-1.5 border border-[#e1e4e8] rounded-[6px] bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]"
-                onClick={() => handleDownload(outputContent, 'converted.yaml')}
+                onClick={() => handleDownload()}
               >
                 <FiDownload /> <span>Download</span>
               </button>
