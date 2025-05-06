@@ -150,7 +150,7 @@ const WsdlToRaml = () => {
 
   const handleDownload = async () => {
     const zip = new JSZip()
-    const baseFolder = zip.folder('OrderProcessingService')
+    const baseFolder = zip.folder(`project-${(+new Date()).toString(36)}`)
 
     for (const [name, content] of Object.entries(files.root)) {
       baseFolder.file(name, content)
@@ -167,7 +167,7 @@ const WsdlToRaml = () => {
     }
 
     const blob = await zip.generateAsync({ type: 'blob' })
-    saveAs(blob, 'OrderProcessingService.zip')
+    saveAs(blob, `project-${(+new Date()).toString(36)}.zip`)
   }
 
   return (
