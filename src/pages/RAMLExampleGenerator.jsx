@@ -22,7 +22,7 @@ const RAMLExampleGenerator = () => {
   const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState('upload')
   const fileInputRef = React.useRef(null)
-
+  const [filename, setFileName] = useState()
   const editorRef = useRef(null)
 
   const handleEditorDidMount = (editor) => {
@@ -41,6 +41,8 @@ const RAMLExampleGenerator = () => {
     if (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
+        console.log(file.name)
+        setFileName(file.name)
         setInputContent(e.target.result)
       }
       reader.readAsText(file)
@@ -61,6 +63,8 @@ const RAMLExampleGenerator = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'filename': filename,
+
         },
         body: JSON.stringify({
           prompt: content,

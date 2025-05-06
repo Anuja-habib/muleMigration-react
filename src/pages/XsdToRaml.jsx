@@ -22,6 +22,7 @@ const XsdToTaml = () => {
   const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState('upload')
   const [inputContentText, setInputContentText] = useState()
+  const [filename, setFileName] = useState()
   const fileInputRef = React.useRef(null)
 
   const editorRef = useRef(null)
@@ -46,10 +47,13 @@ const XsdToTaml = () => {
       editorRef.current.layout()
     }
 
-    if (inputContentText && inputContentText.length > 0) {
-      const file = new File([inputContentText], 'temp', { type: 'application/xml' })
-      setInputContent(file)
-    }
+    if (activeTab === 'paste' && inputContentText) {
+      setInputContent(new File([inputContentText], 'pasted_content.xsd', { type: 'application/xml' }));
+     } else if (activeTab === 'upload' && fileInputRef.current?.files[0]) {
+      setInputContent(fileInputRef.current.files[0]);
+     } else if (!fileInputRef.current?.files[0]) {
+      setInputContent(null);
+     }
   }, [activeTab, inputContentText])
 
   const handleFileUpload = (e) => {
@@ -86,8 +90,12 @@ const XsdToTaml = () => {
       }
 
       const data = await response.json()
-      const parsedYAML = yaml.load(data.result)
-      setOutputContent(parsedYAML)
+      setFileName(data['filename'] )
+
+      const parsedYAML = yaml.load(data['result'])
+      const yamlString = yaml.dump(parsedYAML);
+      console.log('yamlString', yamlString) 
+      setOutputContent(yamlString)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -334,7 +342,7 @@ const XsdToTaml = () => {
               </CopyToClipboard>
               <button
                 className="flex gap-1 items-center px-3 py-1.5 border border-[#e1e4e8] rounded-[6px] bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]"
-                onClick={() => handleDownload(outputContent, 'converted.json')}
+                onClick={() => handleDownload(outputContent, filename ||'converted.json')}
               >
                 <FiDownload /> <span>Download</span>
               </button>
@@ -368,7 +376,7 @@ const XsdToTaml = () => {
                 height="100%"
                 defaultLanguage="yaml"
                 theme="vs-light"
-                value={JSON.stringify(outputContent, null, 4)}
+                value={outputContent}
                 options={{
                   fontSize: 16,
                   lineHeight: 1.8,
