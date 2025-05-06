@@ -13,7 +13,20 @@ import { MdContentPaste } from 'react-icons/md'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import config from '../config/config'
 import Editor from '@monaco-editor/react'
-import yaml from 'js-yaml'
+
+let fileStructure = {
+  root: {
+    'root-file.raml': '#%RAML 1.0\ntitle: Root File',
+  },
+  datatypes: {
+    'file-a1.raml': '#%RAML 1.0\ntitle: File A1',
+    'file-a2.raml': '#%RAML 1.0\ntitle: File A2',
+  },
+  examples: {
+    'file-b1.raml': '#%RAML 1.0\ntitle: File B1',
+    'file-b2.raml': '#%RAML 1.0\ntitle: File B2',
+  },
+}
 
 const WsdlToRaml = () => {
   const [inputContent, setInputContent] = useState()
@@ -22,16 +35,33 @@ const WsdlToRaml = () => {
   const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState('upload')
   const [inputContentText, setInputContentText] = useState()
-  const fileInputRef = React.useRef(null)
+  const [activePath, setActivePath] = useState(['root', 'api.raml'])
+  const [files, setFiles] = useState(fileStructure)
 
+  const fileInputRef = React.useRef(null)
   const editorRef = useRef(null)
+
+  const getActiveContent = () => {
+    const [folder, file] = activePath
+    return files[folder][file]
+  }
+
+  const updateActiveContent = (newContent) => {
+    const [folder, file] = activePath
+    setFiles((prev) => ({
+      ...prev,
+      [folder]: {
+        ...prev[folder],
+        [file]: newContent,
+      },
+    }))
+  }
 
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor
   }
 
   const readFile = (file) => {
-    console.log(file)
     if (file) {
       const reader = new FileReader()
       reader.onload = (e) => {
@@ -79,38 +109,35 @@ const WsdlToRaml = () => {
         body: formData,
       })
 
-      console.log(response)
-
       if (!response.ok) {
         throw new Error('Conversion failed')
       }
 
       const data = await response.json()
 
-      const unescapeString = (str) =>
-        str.replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\\\/g, '\\')
+      const transformResponseToFileStructure = (response) => {
+        const fileStructure = {
+          root: {
+            'api.raml': response.result['api.raml'],
+          },
+          dataTypes: {},
+          examples: {},
+        }
 
-      let baseRaml = data.result['api.raml']
+        // Populate dataTypes folder
+        Object.keys(response.result.dataTypes).forEach((fileName) => {
+          fileStructure.dataTypes[fileName] = response.result.dataTypes[fileName]
+        })
 
-      baseRaml = unescapeString(baseRaml)
+        // Populate examples folder
+        Object.keys(response.result.examples).forEach((fileName) => {
+          fileStructure.examples[fileName] = response.result.examples[fileName]
+        })
 
-      for (const [fileName, typeRaml] of Object.entries(data.result.dataTypes)) {
-        let unescapedType = typeRaml
-
-        unescapedType = unescapeString(unescapedType)
-
-        const typeKey = fileName.replace('.raml', '')
-        const inlinedType = `\n    ${typeKey}:\n${unescapedType
-          .split('\n')
-          .slice(1)
-          .map((l) => '        ' + l)
-          .join('\n')}`
-
-        const includeTag = `!include dataTypes/${fileName}`
-        baseRaml = baseRaml.replace(includeTag, inlinedType.trim())
+        return fileStructure
       }
 
-      setOutputContent(baseRaml)
+      setFiles(transformResponseToFileStructure(data))
     } catch (err) {
       setError(err.message)
     } finally {
@@ -187,7 +214,7 @@ const WsdlToRaml = () => {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 mt-6">
-        <div className="w-full bg-white border border-[#e1e4e8] rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.05)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex flex-col h-[600px]">
+        <div className="w-full bg-white border border-[#e1e4e8] rounded-xl overflow-scroll shadow-[0_2px_12px_rgba(0,0,0,0.05)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex flex-col h-[600px]">
           <div className="flex items-center justify-between px-5 py-4 bg-[#f8f9fa] border-b border-[#e1e4e8]">
             <div className="flex items-center">
               <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
@@ -249,7 +276,7 @@ const WsdlToRaml = () => {
               onChange={handleFileUpload}
               onClick={(e) => (e.target.value = null)}
               className="hidden"
-              accept=".xml"
+              accept=".xml,.wsdl"
             />
             {activeTab === 'upload' ? (
               <div
@@ -319,26 +346,23 @@ const WsdlToRaml = () => {
           )}
         </div>
 
-        <div className="w-full bg-white border border-[#e1e4e8] rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.05)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex flex-col h-[600px]">
+        <div className="w-full bg-white border border-[#e1e4e8] rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex flex-col h-[600px]">
+          {/* Header */}
           <div className="flex items-center justify-between py-4 px-5 bg-white border-b border-[#e1e4e8]">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
                 <FiCode /> Output RAML
               </h3>
               {error ? (
-                <div className="flex items-center gap-1 text-[12px]">
+                <div className="flex items-center gap-1 text-[12px] text-red-800">
                   <FiAlertCircle />
-                  <span className={true ? 'text-red-800' : 'text-green-800'}>
-                    Generation failed
-                  </span>
+                  <span>Generation failed</span>
                 </div>
               ) : (
                 outputContent && (
-                  <div className="flex items-center gap-1 text-[12px] ml-3">
+                  <div className="flex items-center gap-1 text-[12px] text-green-800 ml-3">
                     <FiCheckCircle />
-                    <span className={error ? 'text-red-800' : 'text-green-800'}>
-                      Generation successful
-                    </span>
+                    <span>Generation successful</span>
                   </div>
                 )
               )}
@@ -363,9 +387,12 @@ const WsdlToRaml = () => {
               </button>
             </div>
           </div>
-          <div className="bg-white font-mono text-[12px] leading-[20px] overflow-auto h-full">
+
+          {/* Main Content */}
+          <div className="flex flex-grow overflow-hidden font-mono text-[12px] leading-[20px]">
             {isLoading ? (
-              <div className="flex items-center justify-center h-full">
+              <div className="flex items-center justify-center w-full">
+                {/* Loading spinner */}
                 <svg
                   aria-hidden="true"
                   className="w-8 h-8 text-gray-200 animate-spin dark:text-white fill-indigo-600"
@@ -382,27 +409,59 @@ const WsdlToRaml = () => {
                     fill="currentFill"
                   />
                 </svg>
-                <span className="sr-only">Loading...</span>
               </div>
             ) : error ? (
               <div className="p-4 text-red-600">{error}</div>
             ) : (
-              <Editor
-                height="100%"
-                defaultLanguage="yaml"
-                theme="vs-light"
-                value={outputContent}
-                options={{
-                  fontSize: 16,
-                  lineHeight: 1.8,
-                  fontFamily: "'Fira Code', monospace",
-                  minimap: { enabled: false },
-                  wordWrap: 'on',
-                  lineNumbers: 'on',
-                  cursorStyle: 'line',
-                  tabSize: 4,
-                }}
-              />
+              <div className="flex flex-grow overflow-hidden w-full">
+                {/* Sidebar */}
+                <div className="w-60 bg-gray-100 border-r border-gray-300 p-4 overflow-y-auto">
+                  <h4 className="text-lg font-semibold mb-4">Files</h4>
+                  {Object.entries(files).map(([folderName, folderFiles]) => (
+                    <div key={folderName} className="mb-4">
+                      {folderName !== 'root' && (
+                        <div className="text-sm font-medium text-gray-700 mb-1">{folderName}</div>
+                      )}
+                      <div className={folderName !== 'root' ? 'pl-4' : ''}>
+                        {Object.keys(folderFiles).map((fileName) => (
+                          <div
+                            key={fileName}
+                            className={`cursor-pointer text-sm py-1 px-2 rounded hover:bg-gray-200 ${
+                              activePath[0] === folderName && activePath[1] === fileName
+                                ? 'bg-blue-100 text-blue-600 font-medium'
+                                : ''
+                            }`}
+                            onClick={() => setActivePath([folderName, fileName])}
+                          >
+                            {fileName}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Editor */}
+                <div className="flex-grow overflow-hidden">
+                  <Editor
+                    height="100%"
+                    defaultLanguage="yaml"
+                    theme="vs-light"
+                    value={getActiveContent()}
+                    onChange={(value) => updateActiveContent(value || '')}
+                    options={{
+                      fontSize: 16,
+                      lineHeight: 1.8,
+                      fontFamily: "'Fira Code', monospace",
+                      minimap: { enabled: false },
+                      wordWrap: 'on',
+                      lineNumbers: 'on',
+                      cursorStyle: 'line',
+                      tabSize: 4,
+                    }}
+                  />
+                </div>
+              </div>
             )}
           </div>
         </div>
