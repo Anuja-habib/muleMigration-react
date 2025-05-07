@@ -11,54 +11,21 @@ import {
 } from 'react-icons/fi'
 import { MdContentPaste } from 'react-icons/md'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-import JSZip from 'jszip'
-import { saveAs } from 'file-saver'
 
 import config from '../config/config'
 import Editor from '@monaco-editor/react'
 
-let fileStructure = {
-  root: {
-    'root-file.raml': '#%RAML 1.0\ntitle: Root File',
-  },
-  dataTypes: {
-    'file-a1.raml': '#%RAML 1.0\ntitle: File A1',
-    'file-a2.raml': '#%RAML 1.0\ntitle: File A2',
-  },
-  examples: {
-    'file-b1.raml': '#%RAML 1.0\ntitle: File B1',
-    'file-b2.raml': '#%RAML 1.0\ntitle: File B2',
-  },
-}
-
-const WsdlToRaml = () => {
+const JSONToYAML = () => {
   const [inputContent, setInputContent] = useState()
   const [outputContent, setOutputContent] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState('upload')
   const [inputContentText, setInputContentText] = useState()
-  const [activePath, setActivePath] = useState(['root', 'api.raml'])
-  const [files, setFiles] = useState(fileStructure)
+  const [isRequired, setIsRequired] = useState(false)
 
   const fileInputRef = React.useRef(null)
   const editorRef = useRef(null)
-
-  const getActiveContent = () => {
-    const [folder, file] = activePath
-    return files[folder][file]
-  }
-
-  const updateActiveContent = (newContent) => {
-    const [folder, file] = activePath
-    setFiles((prev) => ({
-      ...prev,
-      [folder]: {
-        ...prev[folder],
-        [file]: newContent,
-      },
-    }))
-  }
 
   const handleEditorDidMount = (editor) => {
     editorRef.current = editor
@@ -94,53 +61,38 @@ const WsdlToRaml = () => {
   }
 
   const handleSubmit = () => {
-    convertToRaml()
+    convertToRaml(inputContentText)
   }
 
-  const convertToRaml = async () => {
+  const convertToRaml = async (content) => {
     setIsLoading(true)
     setError(null)
 
+    console.log({
+      required: isRequired,
+      payload: content,
+    })
+
     try {
-      const formData = new FormData()
-      formData.append('file', inputContent)
-
-      console.log(formData)
-
-      const response = await fetch(config.apiUrlPython + '/wsdl-to-raml', {
+      const response = await fetch(config.apiUrlPython + '/json-to-raml', {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          required: isRequired,
+          payload: JSON.parse(content),
+        }),
       })
 
       if (!response.ok) {
         throw new Error('Conversion failed')
       }
 
-      const data = await response.json()
+      const data = await response.text()
+      console.log(data)
 
-      const transformResponseToFileStructure = (response) => {
-        const fileStructure = {
-          root: {
-            'api.raml': response.result['api.raml'],
-          },
-          dataTypes: {},
-          examples: {},
-        }
-
-        // Populate dataTypes folder
-        Object.keys(response.result.dataTypes).forEach((fileName) => {
-          fileStructure.dataTypes[fileName] = response.result.dataTypes[fileName]
-        })
-
-        // Populate examples folder
-        Object.keys(response.result.examples).forEach((fileName) => {
-          fileStructure.examples[fileName] = response.result.examples[fileName]
-        })
-
-        return fileStructure
-      }
-
-      setFiles(transformResponseToFileStructure(data))
+      setOutputContent(data)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -148,26 +100,21 @@ const WsdlToRaml = () => {
     }
   }
 
-  const handleDownload = async () => {
-    const zip = new JSZip()
-    const baseFolder = zip.folder(`project-${(+new Date()).toString(36)}`)
+  const handleDownload = (content, filename) => {
+    const dataToDownload = typeof content === 'string' ? content : JSON.stringify(content, null, 4)
 
-    for (const [name, content] of Object.entries(files.root)) {
-      baseFolder.file(name, content)
-    }
+    const blob = new Blob([dataToDownload], {
+      type: 'application/json',
+    })
 
-    const dataTypesFolder = baseFolder.folder('dataTypes')
-    for (const [name, content] of Object.entries(files.dataTypes)) {
-      dataTypesFolder.file(name, content)
-    }
-
-    const examplesFolder = baseFolder.folder('examples')
-    for (const [name, content] of Object.entries(files.examples)) {
-      examplesFolder.file(name, content)
-    }
-
-    const blob = await zip.generateAsync({ type: 'blob' })
-    saveAs(blob, `project-${(+new Date()).toString(36)}.zip`)
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -175,10 +122,10 @@ const WsdlToRaml = () => {
       <div className="bg-gradient-to-br from-[#4a46cc] to-[#0b1b42] rounded-2xl p-8 mb-8 text-white shadow-[0_4px_20px_rgba(0,0,0,0.1)]">
         <h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-semibold flex items-center gap-3 tracking-[-0.5px]">
           <FiCode className="text-2xl sm:text-3xl" />
-          WSDL to RAML Converter
+          JSON to YAML Converter
         </h1>
         <p>
-          Convert your WSDL schema to clean, structured RAML definitions for seamless API
+          Convert your JSON example to clean, structured YAML datatypes for seamless API
           documentation and development.
         </p>
 
@@ -189,7 +136,7 @@ const WsdlToRaml = () => {
               Easy Upload
             </h3>
             <p className="text-sm opacity-90 leading-relaxed m-0">
-              Upload your WSDL files with ease — simply drag and drop or paste the content directly.
+              Upload your JSON files with ease — simply drag and drop or paste the content directly.
               We support both single and multiple schema files with automatic validation to ensure
               accuracy.
             </p>
@@ -201,9 +148,9 @@ const WsdlToRaml = () => {
               Smart Generation
             </h3>
             <p className="text-sm opacity-90 leading-relaxed m-0">
-              Our converter automatically generates RAML data type structures from your WSDL schema.
-              It ensures a clean, well-formatted RAML output with intelligent type mappings and
-              useful examples to help you get started.
+              Our converter automatically generates RAML data type structures from your JSON
+              example. It ensures a clean, well-formatted RAML output with intelligent type mappings
+              and useful examples to help you get started.
             </p>
           </div>
 
@@ -213,9 +160,9 @@ const WsdlToRaml = () => {
               Instant Export
             </h3>
             <p className="text-sm opacity-90 leading-relaxed m-0">
-              Once your WSDL is converted to RAML, download the file instantly or copy it to your
-              clipboard. Our tool also provides syntax highlighting and validation to ensure your
-              RAML is API-ready.
+              Once your JSON example is converted to RAML datatype, download the file instantly or
+              copy it to your clipboard. Our tool also provides syntax highlighting and validation
+              to ensure your RAML is API-ready.
             </p>
           </div>
         </div>
@@ -226,7 +173,7 @@ const WsdlToRaml = () => {
           <div className="flex items-center justify-between px-5 py-4 bg-[#f8f9fa] border-b border-[#e1e4e8]">
             <div className="flex items-center">
               <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-                <FiCode /> Input WSDL
+                <FiCode /> Input JSON
               </h3>
             </div>
             <div className="flex gap-2">
@@ -246,16 +193,14 @@ const WsdlToRaml = () => {
               <div className="flex bg-[#edf0f3] rounded-full">
                 <button
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all duration-200 min-w-[130px] justify-center 
-      ${activeTab === 'upload' ? 'bg-[#4a46cc] text-white scale-105' : 'bg-transparent text-[#586069]'}
-  `}
+        ${activeTab === 'upload' ? 'bg-[#4a46cc] text-white scale-105' : 'bg-transparent text-[#586069]'}`}
                   onClick={() => setActiveTab('upload')}
                 >
                   <FiUploadCloud /> Upload File
                 </button>
                 <button
                   className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-medium cursor-pointer transition-all duration-200 min-w-[130px] justify-center 
-      ${activeTab === 'paste' ? 'bg-[#4a46cc] text-white scale-105' : 'bg-transparent text-[#586069]'}
-      `}
+        ${activeTab === 'paste' ? 'bg-[#4a46cc] text-white scale-105' : 'bg-transparent text-[#586069]'}`}
                   onClick={() => setActiveTab('paste')}
                 >
                   <FiEdit /> Write/Paste
@@ -272,9 +217,24 @@ const WsdlToRaml = () => {
               </button>
             )}
           </div>
+
+          {/* ✅ Add required flag toggle below */}
+          <div className="px-4 py-2 bg-[#f6f8fa] border-b border-[#e1e4e8] flex items-center gap-2">
+            <input
+              id="requiredFlag"
+              type="checkbox"
+              checked={isRequired}
+              onChange={(e) => setIsRequired(e.target.checked)}
+              className="accent-[#4a46cc] w-4 h-4"
+            />
+            <label htmlFor="requiredFlag" className="text-sm text-[#586069]">
+              Mark all fields as required
+            </label>
+          </div>
+
           {activeTab === 'paste' && (
             <div className="py-3 px-5 bg-[#f1f8ff] border-b border-[#e1e4e8] text-[#24292e] text-[14px] flex items-center gap-2">
-              <FiCode /> Write or paste your WSDL content below
+              <FiCode /> Write or paste your JSON content below
             </div>
           )}
           <div className="flex-1 overflow-auto relative flex flex-col">
@@ -284,7 +244,7 @@ const WsdlToRaml = () => {
               onChange={handleFileUpload}
               onClick={(e) => (e.target.value = null)}
               className="hidden"
-              accept=".xml,.wsdl"
+              accept=".json"
             />
             {activeTab === 'upload' ? (
               <div
@@ -293,7 +253,7 @@ const WsdlToRaml = () => {
                 onClick={() => fileInputRef.current?.click()}
               >
                 <FiUploadCloud size={48} color="#586069" />
-                <p>Drop your WSDL file here or click to upload</p>
+                <p>Drop your JSON file here or click to upload</p>
                 {(inputContent || inputContentText) && (
                   <span className="text-green-600 font-medium mt-2 flex items-center gap-2">
                     <svg
@@ -315,7 +275,7 @@ const WsdlToRaml = () => {
             ) : (
               <Editor
                 height="100%"
-                defaultLanguage="xml"
+                defaultLanguage="json"
                 theme="vs-light"
                 value={inputContentText}
                 onChange={(value) => setInputContentText(value)}
@@ -346,7 +306,7 @@ const WsdlToRaml = () => {
                 ) : (
                   <>
                     <FiEdit size={16} color="4a46cc" />
-                    Start writing or paste your WSDL content
+                    Start writing or paste your JSON content
                   </>
                 )}
               </div>
@@ -359,7 +319,7 @@ const WsdlToRaml = () => {
           <div className="flex items-center justify-between py-4 px-5 bg-white border-b border-[#e1e4e8]">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-                <FiCode /> Output RAML
+                <FiCode /> Output YAML
               </h3>
               {error ? (
                 <div className="flex items-center gap-1 text-[12px] text-red-800">
@@ -378,9 +338,9 @@ const WsdlToRaml = () => {
             <div className="flex gap-2">
               <CopyToClipboard
                 text={
-                  typeof getActiveContent() === 'string'
-                    ? getActiveContent()
-                    : JSON.stringify(getActiveContent(), null, 4)
+                  typeof outputContent === 'string'
+                    ? outputContent
+                    : JSON.stringify(outputContent, null, 4)
                 }
               >
                 <button className="flex items-center px-3 py-1.5 border border-[#e1e4e8] rounded-[6px] bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]">
@@ -389,7 +349,7 @@ const WsdlToRaml = () => {
               </CopyToClipboard>
               <button
                 className="flex gap-1 items-center px-3 py-1.5 border border-[#e1e4e8] rounded-[6px] bg-white text-[#586069] text-[13px] cursor-pointer transition-all duration-200 hover:bg-[#f3f4f6] hover:border-[#bbb] hover:text-[#24292e] active:bg-[#e1e4e8]"
-                onClick={() => handleDownload()}
+                onClick={() => handleDownload(outputContent, 'converted.json')}
               >
                 <FiDownload /> <span>Download</span>
               </button>
@@ -422,53 +382,22 @@ const WsdlToRaml = () => {
               <div className="p-4 text-red-600">{error}</div>
             ) : (
               <div className="flex flex-grow overflow-hidden w-full">
-                {/* Sidebar */}
-                <div className="w-60 bg-gray-100 border-r border-gray-300 p-4 overflow-y-auto">
-                  <h4 className="text-lg font-semibold mb-4">Files</h4>
-                  {Object.entries(files).map(([folderName, folderFiles]) => (
-                    <div key={folderName} className="mb-4">
-                      {folderName !== 'root' && (
-                        <div className="text-sm font-medium text-gray-700 mb-1">{folderName}</div>
-                      )}
-                      <div className={folderName !== 'root' ? 'pl-4' : ''}>
-                        {Object.keys(folderFiles).map((fileName) => (
-                          <div
-                            key={fileName}
-                            className={`cursor-pointer text-sm py-1 px-2 rounded hover:bg-gray-200 ${
-                              activePath[0] === folderName && activePath[1] === fileName
-                                ? 'bg-blue-100 text-blue-600 font-medium'
-                                : ''
-                            }`}
-                            onClick={() => setActivePath([folderName, fileName])}
-                          >
-                            {fileName}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Editor */}
-                <div className="flex-grow overflow-hidden">
-                  <Editor
-                    height="100%"
-                    defaultLanguage="yaml"
-                    theme="vs-light"
-                    value={getActiveContent()}
-                    onChange={(value) => updateActiveContent(value || '')}
-                    options={{
-                      fontSize: 16,
-                      lineHeight: 1.8,
-                      fontFamily: "'Fira Code', monospace",
-                      minimap: { enabled: false },
-                      wordWrap: 'on',
-                      lineNumbers: 'on',
-                      cursorStyle: 'line',
-                      tabSize: 4,
-                    }}
-                  />
-                </div>
+                <Editor
+                  height="100%"
+                  defaultLanguage="yaml"
+                  theme="vs-light"
+                  value={outputContent}
+                  options={{
+                    fontSize: 16,
+                    lineHeight: 1.8,
+                    fontFamily: "'Fira Code', monospace",
+                    minimap: { enabled: false },
+                    wordWrap: 'on',
+                    lineNumbers: 'on',
+                    cursorStyle: 'line',
+                    tabSize: 4,
+                  }}
+                />
               </div>
             )}
           </div>
@@ -478,4 +407,4 @@ const WsdlToRaml = () => {
   )
 }
 
-export default WsdlToRaml
+export default JSONToYAML

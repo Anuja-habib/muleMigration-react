@@ -36,6 +36,11 @@ export const SidebarData = [
         path: '/raml-tools/standardize-raml',
         icon: <RiAiGenerate style={iconStyle} />,
       },
+      {
+        title: 'JSON to YAML Converter',
+        path: '/raml-tools/json-to-yaml',
+        icon: <RiAiGenerate style={iconStyle} />,
+      },
     ],
   },
   {
