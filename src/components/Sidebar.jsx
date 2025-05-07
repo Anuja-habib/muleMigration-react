@@ -12,6 +12,7 @@ import logo from '../assets/pngegg.png'
 import MulesoftLogo from './MulesoftLogo'
 
 import '../App.css'
+
 const Nav = styled.div`
   height: 100px;
   display: flex;
@@ -150,9 +151,11 @@ const Sidebar = ({ isOpen, toggle }) => {
             <CategoryHeader>{category.title}</CategoryHeader>
             {category.items.map((item, idx) => (
               <MenuItemLink
-                to={item.path}
+                to={item.active ? item.path : '#'}
                 key={idx}
-                className={location.pathname === item.path ? 'active' : ''}
+                className={`${location.pathname === item.path ? 'active' : ''} ${
+                  !item.active ? 'text-gray-400 pointer-events-none cursor-default opacity-10' : ''
+                }`}
                 onClick={toggle}
               >
                 {item.icon}
