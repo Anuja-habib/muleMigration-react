@@ -15,7 +15,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import config from '../config/config'
 import Editor from '@monaco-editor/react'
 
-const JSONToYAML = () => {
+const JSONToRAML = () => {
   const [inputContent, setInputContent] = useState()
   const [outputContent, setOutputContent] = useState()
   const [isLoading, setIsLoading] = useState(false)
@@ -122,10 +122,10 @@ const JSONToYAML = () => {
       <div className="bg-gradient-to-br from-[#4a46cc] to-[#0b1b42] rounded-2xl p-8 mb-8 text-white shadow-[0_4px_20px_rgba(0,0,0,0.1)]">
         <h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-semibold flex items-center gap-3 tracking-[-0.5px]">
           <FiCode className="text-2xl sm:text-3xl" />
-          JSON to YAML Converter
+          JSON to RAML Datatype Converter
         </h1>
         <p>
-          Convert your JSON example to clean, structured YAML datatypes for seamless API
+          Convert your JSON example to clean, structured RAML datatypes for seamless API
           documentation and development.
         </p>
 
@@ -319,7 +319,7 @@ const JSONToYAML = () => {
           <div className="flex items-center justify-between py-4 px-5 bg-white border-b border-[#e1e4e8]">
             <div className="flex items-center gap-4">
               <h3 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-                <FiCode /> Output YAML
+                <FiCode /> Output RAML
               </h3>
               {error ? (
                 <div className="flex items-center gap-1 text-[12px] text-red-800">
@@ -407,4 +407,4 @@ const JSONToYAML = () => {
   )
 }
 
-export default JSONToYAML
+export default JSONToRAML

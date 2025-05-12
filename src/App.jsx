@@ -15,7 +15,7 @@ import Layout from './components/Layout'
 import styled from 'styled-components'
 
 import RAMLExampleGenerator from './pages/RAMLExampleGenerator'
-import JSONToYAML from './pages/JSONToYAML'
+import JSONToRAML from './pages/JSONToRAML'
 import ComingSoon from './pages/ComingSoon'
 
 // Add these styled components
@@ -49,7 +49,7 @@ function App() {
               <Route path="/raml-tools/example-generator" element={<RAMLExampleGenerator />} />
               <Route path="/raml-tools/xsd-to-raml" element={<XsdToRaml />} />
               <Route path="/raml-tools/wsdl-to-raml" element={<WsdlToRaml />} />
-              <Route path="/raml-tools/json-to-yaml" element={<JSONToYAML />} />
+              <Route path="/raml-tools/json-to-yaml" element={<JSONToRAML />} />
               <Route path="/mapping-tools" element={<Services />} />
               <Route
                 path="/mapping-tools/xslt-mapping-extractor"
