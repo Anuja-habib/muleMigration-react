@@ -15,6 +15,9 @@ import config from '../config/config'
 import Editor from '@monaco-editor/react'
 import yaml from 'js-yaml'
 
+import HeroBanner from '../components/HeroBanner'
+import { RAMLExampleGeneratorTexts } from '../seeds/features'
+
 const RAMLExampleGenerator = () => {
   const [inputContent, setInputContent] = useState()
   const [outputContent, setOutputContent] = useState()
@@ -118,69 +121,30 @@ const RAMLExampleGenerator = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto p-6">
-      <div className="bg-gradient-to-br from-[#4a46cc] to-[#0b1b42] rounded-2xl p-8 mb-8 text-white shadow-[0_4px_20px_rgba(0,0,0,0.1)]">
-        <h1 className="mb-4 text-2xl sm:text-3xl lg:text-4xl font-semibold flex items-center gap-3 tracking-[-0.5px]">
-          <FiCode className="text-2xl sm:text-3xl" />
-          RAML Example Generator
-        </h1>
-        <p>Generate RAML examples for the provided DataType.</p>
+      <HeroBanner
+        title={RAMLExampleGeneratorTexts.title}
+        subtitle={RAMLExampleGeneratorTexts.subtitle}
+        features={RAMLExampleGeneratorTexts.features}
+      />
 
-        <div className="flex flex-col md:flex-row gap-6 mt-6">
-          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
-            <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
-              <FiUploadCloud />
-              Easy Upload
-            </h3>
-            <p className="text-sm opacity-90 leading-relaxed m-0">
-              Drag and drop your datatype files or paste content directly. Supports single and
-              multiple schema files with automatic validation.
-            </p>
-          </div>
-
-          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
-            <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
-              <FiCode />
-              Smart Generation
-            </h3>
-            <p className="text-sm opacity-90 leading-relaxed m-0">
-              Automatically generates data type structures into clean, well-formatted RAML examples
-              with intelligent type mapping and examples.
-            </p>
-          </div>
-
-          <div className="bg-white/10 p-6 rounded-xl backdrop-blur border border-white/10 transition-transform duration-200 ease-in-out hover:-translate-y-0.5">
-            <h3 className="text-[18px] mb-3 font-medium flex items-center gap-2">
-              <FiDownload />
-              Instant Export
-            </h3>
-            <p className="text-sm opacity-90 leading-relaxed m-0">
-              Download your converted RAML example instantly or copy to clipboard. Includes syntax
-              highlighting and validation for perfect API specifications.
-            </p>
-          </div>
+      <div className="w-full flex justify-center mt-4">
+        <div className="inline-flex bg-[#edf0f3] p-1 rounded-full shadow-sm border border-[#e1e4e8]">
+          <button
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
+              ${viewTab === 'input' ? 'bg-[#4a46cc] text-white shadow-md scale-105' : 'text-[#586069]'}`}
+            onClick={() => setViewTab('input')}
+          >
+            Input View
+          </button>
+          <button
+            className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
+              ${viewTab === 'output' ? 'bg-[#4a46cc] text-white shadow-md scale-105' : 'text-[#586069]'}`}
+            onClick={() => setViewTab('output')}
+          >
+            Output View
+          </button>
         </div>
       </div>
-
-      {true && (
-        <div className="w-full flex justify-center mt-4">
-          <div className="inline-flex bg-[#edf0f3] p-1 rounded-full shadow-sm border border-[#e1e4e8]">
-            <button
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
-              ${viewTab === 'input' ? 'bg-[#4a46cc] text-white shadow-md scale-105' : 'text-[#586069]'}`}
-              onClick={() => setViewTab('input')}
-            >
-              Input View
-            </button>
-            <button
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer
-              ${viewTab === 'output' ? 'bg-[#4a46cc] text-white shadow-md scale-105' : 'text-[#586069]'}`}
-              onClick={() => setViewTab('output')}
-            >
-              Output View
-            </button>
-          </div>
-        </div>
-      )}
 
       <div className="flex flex-col gap-6 mt-6 w-full">
         {viewTab === 'input' && (
