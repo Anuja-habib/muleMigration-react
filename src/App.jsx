@@ -16,6 +16,7 @@ import styled from 'styled-components'
 
 import RAMLExampleGenerator from './pages/RAMLExampleGenerator'
 import JSONToYAML from './pages/JSONToYAML'
+import ComingSoon from './pages/ComingSoon'
 
 // Add these styled components
 const AppContainer = styled.div`
@@ -58,6 +59,7 @@ function App() {
               <Route path="/migration-tools/tibco" element={<TibcoIntegrationTools />} />
               <Route path="/events/events2" element={<EventsTwo />} />
               <Route path="/generate" element={<Generate />} />
+              <Route path="/coming-soon" element={<ComingSoon />} />
             </Route>
           </Routes>
           <ChatBotWithNavigation />
