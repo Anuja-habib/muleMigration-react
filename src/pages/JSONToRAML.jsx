@@ -6,8 +6,6 @@ import Editor from '@monaco-editor/react'
 
 import { JSONToRAMLTexts } from '../seeds/features'
 
-import yaml from 'js-yaml'
-
 import SendSubmit from '../components/HeroPages/SendSubmit'
 import HeroBanner from '../components/HeroPages/HeroBanner'
 import ToggleTabs from '../components/HeroPages/ToggleTabs'
@@ -18,7 +16,7 @@ import PasteInputText from '../components/HeroPages/PasteInputText'
 import ToggleOutputText from '../components/HeroPages/ToggleOutputText'
 import OutputActions from '../components/HeroPages/OutputActions'
 
-const JSONToYAML = () => {
+const JSONToRAML = () => {
   const [inputContent, setInputContent] = useState()
   const [outputContent, setOutputContent] = useState()
   const [isLoading, setIsLoading] = useState(false)
@@ -79,7 +77,7 @@ const JSONToYAML = () => {
     })
 
     try {
-      const response = await fetch(config.apiUrlPython + '/json-to-yaml', {
+      const response = await fetch(config.apiUrlPython + '/json-to-raml', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +93,7 @@ const JSONToYAML = () => {
       }
 
       const data = await response.text()
-      setOutputContent(JSON.parse(data).yaml)
+      setOutputContent(data)
       setViewTab('output')
     } catch (err) {
       setError(err.message)
@@ -146,7 +144,7 @@ const JSONToYAML = () => {
               {inputContent && <SendSubmit isLoading={isLoading} handleSubmit={handleSubmit} />}
             </div>
 
-            {/* <div className="px-4 py-2 bg-[#f6f8fa] border-b border-[#e1e4e8] flex items-center gap-2">
+            <div className="px-4 py-2 bg-[#f6f8fa] border-b border-[#e1e4e8] flex items-center gap-2">
               <input
                 id="requiredFlag"
                 type="checkbox"
@@ -157,7 +155,7 @@ const JSONToYAML = () => {
               <label htmlFor="requiredFlag" className="text-sm text-[#586069]">
                 Mark all fields as required
               </label>
-            </div> */}
+            </div>
 
             {activeTab === 'paste' && (
               <div className="py-3 px-5 bg-[#f1f8ff] border-b border-[#e1e4e8] text-[#24292e] text-[14px] flex items-center gap-2">
@@ -254,4 +252,4 @@ const JSONToYAML = () => {
   )
 }
 
-export default JSONToYAML
+export default JSONToRAML

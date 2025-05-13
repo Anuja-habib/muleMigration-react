@@ -4,7 +4,7 @@ import './App.css'
 import ChatBot from './components/ChatBot'
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import { RamlTools } from './pages/RamlTools'
-import XsdToRaml from './pages/XsdToRaml'
+import XSDToRAML from './pages/XSDToRAML'
 import { Services, XsltMappingExtractor } from './pages/MappingTools'
 import { IntegrationTools, TibcoIntegrationTools, EventsTwo } from './pages/IntegrationTools'
 import WsdlToRaml from './pages/WsdlToRaml'
@@ -15,6 +15,7 @@ import Layout from './components/Layout'
 import styled from 'styled-components'
 
 import RAMLExampleGenerator from './pages/RAMLExampleGenerator'
+import JSONToRAML from './pages/JSONToRAML'
 import JSONToYAML from './pages/JSONToYAML'
 import ComingSoon from './pages/ComingSoon'
 
@@ -47,8 +48,9 @@ function App() {
               <Route index element={<Home />} />
               <Route path="/raml-tools" element={<RamlTools />} />
               <Route path="/raml-tools/example-generator" element={<RAMLExampleGenerator />} />
-              <Route path="/raml-tools/xsd-to-raml" element={<XsdToRaml />} />
+              <Route path="/raml-tools/xsd-to-raml" element={<XSDToRAML />} />
               <Route path="/raml-tools/wsdl-to-raml" element={<WsdlToRaml />} />
+              <Route path="/raml-tools/json-to-raml" element={<JSONToRAML />} />
               <Route path="/raml-tools/json-to-yaml" element={<JSONToYAML />} />
               <Route path="/mapping-tools" element={<Services />} />
               <Route
