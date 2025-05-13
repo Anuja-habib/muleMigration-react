@@ -41,7 +41,13 @@ export const SidebarData = [
         active: false,
       },
       {
-        title: 'JSON to YAML Converter',
+        title: 'JSON to RAML Datatype Converter',
+        path: '/raml-tools/json-to-raml',
+        icon: <RiAiGenerate style={iconStyle} />,
+        active: true,
+      },
+      {
+        title: 'JSON to YAML Example Converter',
         path: '/raml-tools/json-to-yaml',
         icon: <RiAiGenerate style={iconStyle} />,
         active: true,

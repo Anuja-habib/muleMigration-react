@@ -199,7 +199,15 @@ const WsdlToRaml = () => {
       <div className="flex flex-col lg:flex-row gap-6 mt-6">
         {viewTab === 'input' && (
           <div className="w-full bg-white border border-[#e1e4e8] rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.05)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex flex-col h-[600px]">
-            <InputSectionHeader onClear={() => setInputContent(null)} />
+            <InputSectionHeader
+              onClear={() => {
+                setInputContent(null)
+                setInputContentText('')
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = '' // <== this actually clears the file input
+                }
+              }}
+            />
 
             <div className="flex justify-between px-4 py-3 bg-[#f6f8fa] border-b border-[#e1e4e8]">
               <ToggleInputTabs activeTab={activeTab} setActiveTab={setActiveTab} />
