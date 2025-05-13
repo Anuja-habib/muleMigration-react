@@ -1,4 +1,3 @@
-import React from 'react'
 import { FiSend } from 'react-icons/fi'
 
 const SendSubmit = ({ isLoading, handleSubmit }) => {

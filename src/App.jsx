@@ -4,7 +4,7 @@ import './App.css'
 import ChatBot from './components/ChatBot'
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import { RamlTools } from './pages/RamlTools'
-import XsdToRaml from './pages/XsdToRaml'
+import XSDToRAML from './pages/XSDToRAML'
 import { Services, XsltMappingExtractor } from './pages/MappingTools'
 import { IntegrationTools, TibcoIntegrationTools, EventsTwo } from './pages/IntegrationTools'
 import WsdlToRaml from './pages/WsdlToRaml'
@@ -47,7 +47,7 @@ function App() {
               <Route index element={<Home />} />
               <Route path="/raml-tools" element={<RamlTools />} />
               <Route path="/raml-tools/example-generator" element={<RAMLExampleGenerator />} />
-              <Route path="/raml-tools/xsd-to-raml" element={<XsdToRaml />} />
+              <Route path="/raml-tools/xsd-to-raml" element={<XSDToRAML />} />
               <Route path="/raml-tools/wsdl-to-raml" element={<WsdlToRaml />} />
               <Route path="/raml-tools/json-to-yaml" element={<JSONToRAML />} />
               <Route path="/mapping-tools" element={<Services />} />

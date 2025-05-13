@@ -131,7 +131,7 @@ const RAMLExampleGenerator = () => {
       <div className="flex flex-col gap-6 mt-6 w-full">
         {viewTab === 'input' && (
           <div className="w-full bg-white border border-[#e1e4e8] rounded-xl overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.05)] transition-shadow duration-200 ease-in-out hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] flex flex-col h-[600px]">
-            <InputSectionHeader setInputContent={setInputContent} />
+            <InputSectionHeader onClear={() => setInputContent(null)} />
 
             <div className="flex justify-between px-4 py-3 bg-[#f6f8fa] border-b border-[#e1e4e8]">
               <ToggleInputTabs activeTab={activeTab} setActiveTab={setActiveTab} />
