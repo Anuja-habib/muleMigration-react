@@ -3,9 +3,11 @@ import '../css/Feedback.css'; // Import the CSS file
 //import { useHistory } from 'react-router-dom'; // Removed react-router-dom v5
 import { SmallBanner } from '../components/Banner';
 
+
+
 const FeedbackForm = () => {
     let title = 'Provide Your Feedback';
-    let subtitle = '';
+    let subtitle = 'We are constantly striving to improve and your insights help us get better.';
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -14,8 +16,8 @@ const FeedbackForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submissionStatus, setSubmissionStatus] = useState('idle');
     const [errorMessage, setErrorMessage] = useState('');
-    //const history = useHistory(); // Removed useHistory
 
+    //const history = useHistory(); // Removed useHistory
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -82,7 +84,8 @@ const FeedbackForm = () => {
     };
 
     return (
-        <div> <SmallBanner title={title} subtitle={subtitle} />
+        <div> 
+            <SmallBanner title={title} subtitle={subtitle} />
         <div className="feedback-form-container">
             <div className="feedback-form-wrapper">
                 <div className="feedback-form-header">
@@ -217,6 +220,7 @@ const FeedbackForm = () => {
                 </form>
             </div>
         </div>
+
         </div>
     );
 };

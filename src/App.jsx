@@ -11,13 +11,14 @@ import WsdlToRaml from './pages/WsdlToRaml'
 import Home from './pages/Home'
 import Generate from './pages/Genarate'
 import Layout from './components/Layout'
-
+import FeedbackForm from './components/FeedbackButton';
 import styled from 'styled-components'
-
+import Feedback from './pages/Feedback' // Importing FeedbackForm directly
 import RAMLExampleGenerator from './pages/RAMLExampleGenerator'
 import JSONToRAML from './pages/JSONToRAML'
 import JSONToYAML from './pages/JSONToYAML'
 import ComingSoon from './pages/ComingSoon'
+import MuleApplicationGenerator from './components/GenerateMuleApp'
 
 // Add these styled components
 const AppContainer = styled.div`
@@ -37,6 +38,10 @@ const ChatBotWithNavigation = () => {
   const navigate = useNavigate()
   return <ChatBot navigate={navigate} />
 }
+const FeedBackWithNavigation = () => {
+  const navigate = useNavigate()
+  return <FeedbackForm navigate={navigate} />
+}
 
 function App() {
   return (
@@ -53,6 +58,7 @@ function App() {
               <Route path="/raml-tools/json-to-raml" element={<JSONToRAML />} />
               <Route path="/raml-tools/json-to-yaml" element={<JSONToYAML />} />
               <Route path="/mapping-tools" element={<Services />} />
+              <Route path="/feedback" element={<Feedback />} />
               <Route
                 path="/mapping-tools/xslt-mapping-extractor"
                 element={<XsltMappingExtractor />}
@@ -62,8 +68,10 @@ function App() {
               <Route path="/events/events2" element={<EventsTwo />} />
               <Route path="/generate" element={<Generate />} />
               <Route path="/coming-soon" element={<ComingSoon />} />
+              <Route path="/generate-mule-app" element={<MuleApplicationGenerator />} />
             </Route>
           </Routes>
+          <FeedBackWithNavigation />
           <ChatBotWithNavigation />
         </MainContent>
       </Router>

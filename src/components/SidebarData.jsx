@@ -118,7 +118,7 @@ export const SidebarData = [
         title: 'Generate Mule Application',
         path: '/generate-mule-app',
         icon: <IoIcons.IoMdHelpCircle style={iconStyle} />,
-        active: false,
+        active: true,
       },
     ],
   },

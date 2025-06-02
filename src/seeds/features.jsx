@@ -50,6 +50,31 @@ const XSDToRAMLTexts = {
     },
   ],
 }
+const MuleAppGenerator = {
+  title: 'Mule Application Generator',
+  subtitle:
+    'Generate Mule applications from your prompts for seamless API integration and development.',
+  features: [
+    {
+      icon: <FiUploadCloud />,
+      title: 'Easy Upload',
+      description:
+        'Upload your project files with ease — simply drag and drop or paste the content directly. We support both single and multiple files with automatic validation to ensure accuracy.',
+    },
+    {
+      icon: <FiCode />,
+      title: 'Smart Generation',
+      description:
+        'Our generator automatically creates Mule applications based on your prompts. It ensures a well-structured output with intelligent mappings and useful examples to help you get started.',
+    },
+    {
+      icon: <FiDownload />,
+      title: 'Instant Export',
+      description:
+        'Once your Mule application is generated, download the file instantly or copy it to your clipboard. Our tool also provides syntax highlighting and validation to ensure your application is ready for deployment.',
+    },
+  ],
+}
 
 const WSDLToRAMLTexts = {
   title: 'WSDL to RAML Converter',
@@ -103,4 +128,4 @@ const JSONToRAMLTexts = {
   ],
 }
 
-export { RAMLExampleGeneratorTexts, XSDToRAMLTexts, WSDLToRAMLTexts, JSONToRAMLTexts }
+export { RAMLExampleGeneratorTexts, XSDToRAMLTexts, WSDLToRAMLTexts, JSONToRAMLTexts, MuleAppGenerator }
