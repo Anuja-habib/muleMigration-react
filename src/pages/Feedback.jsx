@@ -16,11 +16,66 @@ const FeedbackForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submissionStatus, setSubmissionStatus] = useState('idle');
     const [errorMessage, setErrorMessage] = useState('');
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [isDragOver, setIsDragOver] = useState(false);
 
     //const history = useHistory(); // Removed useHistory
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const handleImageSelect = (files) => {
+        const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+        const newImages = imageFiles.map(file => ({
+            file,
+            id: Date.now() + Math.random(),
+            preview: URL.createObjectURL(file)
+        }));
+        setSelectedImages(prev => [...prev, ...newImages]);
+    };
+
+    const handleImageInputChange = (e) => {
+        if (e.target.files.length > 0) {
+            handleImageSelect(e.target.files);
+        }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragOver(true);
+    };
+
+    const handleDragLeave = (e) => {
+        e.preventDefault();
+        setIsDragOver(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragOver(false);
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleImageSelect(files);
+        }
+    };
+
+    const removeImage = (imageId) => {
+        setSelectedImages(prev => {
+            const imageToRemove = prev.find(img => img.id === imageId);
+            if (imageToRemove) {
+                URL.revokeObjectURL(imageToRemove.preview);
+            }
+            return prev.filter(img => img.id !== imageId);
+        });
+    };
+
+    const formatFileSize = (bytes) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     };
 
     const handleSubmit = async (e) => {
@@ -47,22 +102,71 @@ const FeedbackForm = () => {
         setSubmissionStatus('idle');
         setErrorMessage('');
 
-        // Simulate an API call
+        // Convert images to base64 and send everything as JSON
         try {
-            // Send form data to your backend API
-            const apiResponse = await fetch('http://127.0.0.1:5004/submitFeebdack', {
+            console.log('Preparing feedback submission...');
+            console.log('Selected images count:', selectedImages.length);
+            
+            // Convert images to base64
+            const imagePromises = selectedImages.map((imageData) => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        resolve({
+                            name: imageData.file.name,
+                            type: imageData.file.type,
+                            size: imageData.file.size,
+                            data: e.target.result // This includes the data:image/type;base64, prefix
+                        });
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(imageData.file);
+                });
+            });
+
+            const base64Images = await Promise.all(imagePromises);
+            console.log(`Converted ${base64Images.length} images to base64`);
+
+            // Create JSON payload with all data including base64 images
+            const jsonPayload = {
+                name: formData.name,
+                email: formData.email,
+                feedback: formData.feedback,
+                images: base64Images
+            };
+
+            console.log('Sending JSON payload with images as base64...');
+
+            const apiResponse = await fetch('http://127.0.0.1:5001/submitFeedback', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(jsonPayload),
             });
 
+            // Handle response once for both cases
             if (!apiResponse.ok) {
-                throw new Error(`HTTP error! status: ${apiResponse.status}`);
+                // Better error handling for debugging - read response only once
+                let errorMessage = `HTTP error! status: ${apiResponse.status}`;
+                try {
+                    const responseText = await apiResponse.text();
+                    try {
+                        // Try to parse as JSON first
+                        const errorData = JSON.parse(responseText);
+                        errorMessage += ` - ${JSON.stringify(errorData)}`;
+                    } catch (jsonParseError) {
+                        // If not JSON, use as text
+                        errorMessage += ` - ${responseText}`;
+                    }
+                } catch (readError) {
+                    errorMessage += ` - Unable to read response body`;
+                }
+                throw new Error(errorMessage);
             }
-             const responseData = await apiResponse.json();
-            console.log('Response from /sendEmail:', responseData); // Log the response
+            
+            const responseData = await apiResponse.json();
+            console.log('Response from /submitFeedback:', responseData);
 
             // Simulate a successful response
             const response = { ok: true, data: { message: 'Feedback submitted successfully!' } };
@@ -70,6 +174,9 @@ const FeedbackForm = () => {
             if (response.ok) {
                 setSubmissionStatus('success');
                 setFormData({ name: '', email: '', feedback: '' });
+                // Clean up image previews
+                selectedImages.forEach(image => URL.revokeObjectURL(image.preview));
+                setSelectedImages([]);
                  //history.push('/'); //removed
             } else {
                 setSubmissionStatus('error');
@@ -149,6 +256,103 @@ const FeedbackForm = () => {
                                 placeholder="Your Feedback"
                                 disabled={isSubmitting}
                             />
+                        </div>
+
+                        {/* Image Upload Section */}
+                        <div>
+                            <label className="feedback-label">
+                                Images (Optional)
+                            </label>
+                            <div
+                                className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ${
+                                    isDragOver 
+                                        ? 'border-blue-500 bg-blue-50' 
+                                        : 'border-gray-300 hover:border-gray-400'
+                                } ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                                onDragOver={handleDragOver}
+                                onDragLeave={handleDragLeave}
+                                onDrop={handleDrop}
+                                style={{ minHeight: '120px' }}
+                            >
+                                <div className="flex flex-col items-center justify-center space-y-2">
+                                    <svg
+                                        className={`w-12 h-12 ${isDragOver ? 'text-blue-500' : 'text-gray-400'}`}
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                        />
+                                    </svg>
+                                    <p className="text-lg font-medium text-gray-700">
+                                        Drop images here, or click to browse
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        PNG, JPG, GIF up to 10MB each
+                                    </p>
+                                    <input
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        onChange={handleImageInputChange}
+                                        className="hidden"
+                                        id="image-upload"
+                                        disabled={isSubmitting}
+                                    />
+                                    <label
+                                        htmlFor="image-upload"
+                                        className={`inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition duration-200 ${
+                                            isSubmitting ? 'cursor-not-allowed' : 'cursor-pointer'
+                                        }`}
+                                    >
+                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                        </svg>
+                                        Choose Images
+                                    </label>
+                                </div>
+                            </div>
+
+                            {/* Selected Images Preview */}
+                            {selectedImages.length > 0 && (
+                                <div className="mt-4">
+                                    <p className="text-sm font-medium text-gray-700 mb-3">
+                                        Selected Images ({selectedImages.length})
+                                    </p>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                        {selectedImages.map((image) => (
+                                            <div key={image.id} className="relative group">
+                                                <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                                    <img
+                                                        src={image.preview}
+                                                        alt="Preview"
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeImage(image.id)}
+                                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition duration-200"
+                                                    disabled={isSubmitting}
+                                                >
+                                                    ×
+                                                </button>
+                                                <div className="mt-1 text-xs text-gray-500 truncate">
+                                                    {image.file.name}
+                                                </div>
+                                                <div className="text-xs text-gray-400">
+                                                    {formatFileSize(image.file.size)}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 
