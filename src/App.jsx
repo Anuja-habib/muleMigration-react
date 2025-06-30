@@ -18,6 +18,7 @@ import RAMLExampleGenerator from './pages/RAMLExampleGenerator'
 import JSONToRAML from './pages/JSONToRAML'
 import JSONToYAML from './pages/JSONToYAML'
 import ComingSoon from './pages/ComingSoon'
+import DataweaveGenerator from './components/DataweaveGenerator'
 import MuleApplicationGenerator from './components/GenerateMuleApp'
 
 // Add these styled components
@@ -58,6 +59,7 @@ function App() {
               <Route path="/raml-tools/json-to-raml" element={<JSONToRAML />} />
               <Route path="/raml-tools/json-to-yaml" element={<JSONToYAML />} />
               <Route path="/mapping-tools" element={<Services />} />
+              <Route path="/mapping-tools/dwl-generator" element={<DataweaveGenerator />} />
               <Route path="/feedback" element={<Feedback />} />
               <Route
                 path="/mapping-tools/xslt-mapping-extractor"

@@ -67,7 +67,7 @@ export const SidebarData = [
         title: 'Dataweave Script Generator',
         path: '/mapping-tools/dwl-generator',
         icon: <IoIcons.IoIosPaper style={iconStyle} />,
-        active: false,
+        active: true,
       },
     ],
   },

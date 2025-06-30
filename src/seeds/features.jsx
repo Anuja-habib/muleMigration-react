@@ -128,4 +128,30 @@ const JSONToRAMLTexts = {
   ],
 }
 
-export { RAMLExampleGeneratorTexts, XSDToRAMLTexts, WSDLToRAMLTexts, JSONToRAMLTexts, MuleAppGenerator }
+const DataweaveGeneratorTexts = {
+  title: 'Dataweave Code Generator',
+  subtitle:
+    'Generate Dataweave transformation code from your input data and expected output format.',
+  features: [
+    {
+      icon: <FiUploadCloud />,
+      title: 'Easy Input',
+      description:
+        'Paste your input data and expected output format directly. We support JSON, XML, and other data formats with automatic validation to ensure accuracy.',
+    },
+    {
+      icon: <FiCode />,
+      title: 'Smart Generation',
+      description:
+        'Our generator automatically creates Dataweave transformation code based on your input and expected output. It ensures clean, well-formatted code with intelligent mappings and best practices.',
+    },
+    {
+      icon: <FiDownload />,
+      title: 'Instant Export',
+      description:
+        'Once your Dataweave code is generated, download the .dwl file instantly or copy it to your clipboard. Our tool provides syntax highlighting and validation to ensure your code is ready for use.',
+    },
+  ],
+}
+
+export { RAMLExampleGeneratorTexts, XSDToRAMLTexts, WSDLToRAMLTexts, JSONToRAMLTexts, MuleAppGenerator, DataweaveGeneratorTexts }

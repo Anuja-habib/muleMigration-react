@@ -228,7 +228,6 @@ const MuleApplicationGenerator = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Custom-Header': 'MuleAppGeneratorClient',
         },
         body: JSON.stringify(jsonPayload),
       });
