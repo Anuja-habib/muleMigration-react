@@ -1,10 +1,10 @@
 // src/ComponentDetailDisplay.js
-import React from 'react';
-import '../css/ComponentDetailDisplay.css'; // Create this CSS file
+import React from 'react'
+import '../css/ComponentDetailDisplay.css' // Create this CSS file
 
 function ComponentDetailDisplay({ item }) {
   if (!item) {
-    return null; // Don't render if no item is selected
+    return null // Don't render if no item is selected
   }
 
   return (
@@ -21,7 +21,7 @@ function ComponentDetailDisplay({ item }) {
       )}
       <p>Path: {item.path}</p>
     </div>
-  );
+  )
 }
 
-export default ComponentDetailDisplay;
+export default ComponentDetailDisplay

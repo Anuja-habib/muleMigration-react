@@ -1,1 +1,4 @@
-web: npm run dev
+
+web: serve -s dist
+
+

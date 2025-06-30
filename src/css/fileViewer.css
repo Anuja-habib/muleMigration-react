@@ -1,4 +1,4 @@
-.responsePreview{
+.responsePreview {
   width: 80%;
   max-width: 80%; /* Adjust as needed */
   margin: 10px auto;
@@ -6,10 +6,8 @@
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  
-  }
-  .input-container{
+}
+.input-container {
   width: 100%;
   max-width: 800px; /* Adjust as needed */
   margin: 20px auto;
@@ -17,92 +15,94 @@
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  .input-container input[type="text"] {
+}
+.input-container input[type='text'] {
   width: calc(100% - 120px); /* Adjust spacing as needed */
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
   margin-right: 10px; /* Adjust spacing as needed */
-  }.input-container button[type="submit"] {
-  background-color: #007bff; /* Blue background */
+}
+/* .input-container button[type='submit'] {
+  background-color: #007bff; 
   color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition on hover */
-  }.input-container button[type="submit"]:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 600px) {
+  transition: background-color 0.3s ease; 
+} */
+/* .input-container button[type='submit']:hover {
+  background-color: #0056b3;
+} */
+
+/* Responsive Styles */
+@media (max-width: 600px) {
   .input-container {
     padding: 15px;
   }
-  
-  .input-container input[type="text"] {
+
+  .input-container input[type='text'] {
     width: 100%;
     margin-bottom: 10px;
   }
-  
-  .input-container button[type="submit"] {
+
+  .input-container button[type='submit'] {
     width: 100%;
   }
-  }
-  .copyToClipboard{
-    align-items: right;
-    justify-content: right;
-  }
-  .icon-style{
+}
+.copyToClipboard {
+  align-items: right;
+  justify-content: right;
+}
+.icon-style {
   width: 24px;
   height: 24px;
   fill: #606060; /* Green fill color, often associated with downloads */
-  transition: fill 0.2s ease; 
-  }
-  
-  
-  * {
+  transition: fill 0.2s ease;
+}
+
+* {
   box-sizing: border-box;
-  }
-  
-  /* Create two equal columns that floats next to each other */
-  .column {
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
   float: left;
   width: 50%;
   padding: 10px;
   height: 100%; /* Should be removed. Only for demonstration */
-  }
-  
-  /* Clear floats after the columns */
-  .row:after {
-  content: "";
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: '';
   display: table;
   clear: both;
-  }
-  
-  .input-container textarea {
+}
+
+.input-container textarea {
   width: calc(100% - 120px); /* Adjust spacing as needed */
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
   margin-right: 10px; /* Adjust spacing as needed */
-  }.input-container button , input[type="file"]::file-selector-button{
-  background-color: #007bff; /* Blue background */
+}
+/* .input-container button,
+input[type='file']::file-selector-button {
+  background-color: #007bff; 
   color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition on hover */
+  transition: background-color 0.3s ease; 
   margin: 2px;
-  }.input-container input[type="file"]::file-selector-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-  }
-  
-  
+} */
+/* .input-container input[type='file']::file-selector-button:hover {
+  background-color: #0056b3; 
+} */

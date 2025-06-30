@@ -1,11 +1,11 @@
 // src/ComponentDistribution.js
-import React from 'react';
-import { PieChart, Pie, Cell, Legend } from 'recharts';
-import '../css/ComponentDistribution.css';
+import React from 'react'
+import { PieChart, Pie, Cell, Legend } from 'recharts'
+import '../css/ComponentDistribution.css'
 
 function ComponentDistribution({ componentCounts }) {
-  const data = Object.entries(componentCounts).map(([name, value]) => ({ name, value }));
-  const COLORS = ['#3182CE', '#48BB78', '#DD6B20', '#ECC94B']; // Example colors
+  const data = Object.entries(componentCounts).map(([name, value]) => ({ name, value }))
+  const COLORS = ['#3182CE', '#48BB78', '#DD6B20', '#ECC94B'] // Example colors
 
   return (
     <div className="component-distribution">
@@ -25,18 +25,20 @@ function ComponentDistribution({ componentCounts }) {
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-        
       </PieChart>
       <div className="legend">
         {data.map((entry, index) => (
           <div key={entry.name} className="legend-item">
-            <span className="legend-color" style={{ backgroundColor: COLORS[index % COLORS.length] }}></span>
+            <span
+              className="legend-color"
+              style={{ backgroundColor: COLORS[index % COLORS.length] }}
+            ></span>
             <span>{entry.name}</span>
           </div>
         ))}
       </div>
     </div>
-  );
+  )
 }
 
-export default ComponentDistribution;
+export default ComponentDistribution

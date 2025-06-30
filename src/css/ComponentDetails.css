@@ -1,44 +1,46 @@
 .component-details {
-    border: 1px solid #ddd;
-    padding: 20px;
-    flex: 1;
-    border-radius: 20px;
-    background: #ecebeb;
-    box-shadow:  20px 20px 60px #bebebe,
-                -20px -20px 60px #ffffff;
-  }
-  
-  .component-details h2 {
-    font-size: 1.2em;
-    margin-bottom: 10px;
-  }
-  
-  .component-type-section {
-    margin-bottom: 20px;
-  }
-  
-  .component-type-section h3 {
-    font-size: 1em;
-    margin-bottom: 5px;
-    color: black;
-  }
-  
-  .component-type-section ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
-  
-  .component-type-section li {
-    margin-bottom: 5px;
-   
-    border :2px solid #ddd;
-    background: #e0e0e0;
-box-shadow:  20px 20px 60px #bebebe,
-             -20px -20px 60px #ffffff;
-  }
-    
-  .component-type-section  a{
-    margin-bottom: 5px;
-    text-decoration: none;
-    color: black;
-  }
+  border: 1px solid #ddd;
+  padding: 20px;
+  flex: 1;
+  border-radius: 20px;
+  background: #ecebeb;
+  box-shadow:
+    20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+}
+
+.component-details h2 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.component-type-section {
+  margin-bottom: 20px;
+}
+
+.component-type-section h3 {
+  font-size: 1em;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.component-type-section ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.component-type-section li {
+  margin-bottom: 5px;
+
+  border: 2px solid #ddd;
+  background: #e0e0e0;
+  box-shadow:
+    20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+}
+
+.component-type-section a {
+  margin-bottom: 5px;
+  text-decoration: none;
+  color: black;
+}

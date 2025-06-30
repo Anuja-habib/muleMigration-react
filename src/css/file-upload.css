@@ -1,122 +1,118 @@
 .file-upload-container {
-        margin-top: 1%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 400px;
-        background-color: #f8f8f8;
-        border-radius: 5px;
-        cursor: pointer;
-        ;
-    
+  margin-top: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 400px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    border: 2px dashed #d9d9d9;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  border: 2px dashed #d9d9d9;
+}
+.file-upload-sub-container {
+  padding: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+  width: 70%;
+  height: 120%;
+  background-color: #eeeeee;
+  border-radius: 50px;
+  cursor: pointer;
+}
+.file-upload-input-container {
+  height: 200px;
+  width: 80%;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* button {
+  background-color: #1c2764;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 2px;
+  border: none;
+  cursor: pointer;
+  width: 100px;
+  border-radius: 50px;
+  &:hover {
+    background-color: #273275;
   }
-.file-upload-sub-container{
-        padding: 1%;
-        display: flex;
-        flex-direction: column;
-        align-items:center;
-        justify-content: left;
-        width: 70%;
-        height: 120%;
-        background-color: #eeeeee;
-        border-radius: 50px;
-        cursor: pointer;
+} */
+.toggle-div {
+  display: list-item;
+  justify-content: start;
+  align-items: start;
+  width: 100%;
+  height: 40%;
+  border-radius: 5px;
+  cursor: pointer;
 }
-.file-upload-input-container{
-       
-        height: 200px;
-        width: 80%;
-        border-radius: 50px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-       
-
-}
-
-button {
-        background-color: #1c2764;
-        color: white;
-        padding: 14px 20px;
-        margin: 8px 2px;
-        border: none;
-        cursor: pointer;
-        width: 100px;
-        border-radius: 50px;
-        &:hover {
-          background-color: #273275;
-        }
-}
-.toggle-div{
-        display:list-item;
-        justify-content: start;
-        align-items: start;
-        width: 100%;
-        height: 40%;
-        border-radius: 5px;
-        cursor: pointer;
-}
-textarea
-{       width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        box-sizing: border-box;
-        border: 2px solid #ccc;
-        border-radius: 50px;
-        background-color: #f8f8f8;
-        font-size: 16px;
-        resize: vertical; /* Allows vertical resizing */
-        transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
-        outline: none; /* Remove default outline */
-        font-family: 'Arial', sans-serif; /* Choose a clean font */
-        line-height: 1.6; /* Improve readability */
+/* textarea {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 50px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: vertical; 
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease; 
+  outline: none;
+  font-family: 'Arial', sans-serif; 
+  line-height: 1.6; 
 }
 textarea:focus {
-        border-color: #273275; /* Green border on focus */
-        box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); /* Subtle shadow on focus */
-        background-color: #fff; /* White background on focus */
-      }
-      
-      textarea::placeholder {
-        color: #aaa; /* Lighter color for placeholder */
-        font-style: italic; /* Italic placeholder */
-      }
-      
-      /* Optional: Add a subtle hover effect */
-      textarea:hover {
-          border-color: #999;
-      }
-      
-      /* Optional: Add a subtle shadow when not focused */
-      textarea {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-      
-      /* Optional: Dark mode adjustments */
-      .dark-mode textarea {
-          background-color: #333;
-          color: #eee;
-          border-color: #555;
-      }
-      
-      .dark-mode textarea:focus {
-          border-color: #66bb6a;
-          box-shadow: 0 0 8px rgba(102, 187, 106, 0.5);
-          background-color: #444;
-      }
-      
-      .dark-mode textarea::placeholder {
-          color: #777;
-      }
-.file-upload-input-container--zip{
-        border: 2px dashed #b3b3b3;
+  border-color: #273275; 
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+  background-color: #fff; 
+}
+
+textarea::placeholder {
+  color: #aaa;
+  font-style: italic; 
+}
+
+
+textarea:hover {
+  border-color: #999;
+}
+
+
+textarea {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} */
+
+.dark-mode textarea {
+  background-color: #333;
+  color: #eee;
+  border-color: #555;
+}
+
+.dark-mode textarea:focus {
+  border-color: #66bb6a;
+  box-shadow: 0 0 8px rgba(102, 187, 106, 0.5);
+  background-color: #444;
+}
+
+.dark-mode textarea::placeholder {
+  color: #777;
+}
+.file-upload-input-container--zip {
+  border: 2px dashed #b3b3b3;
 }

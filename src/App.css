@@ -1,13 +1,9 @@
+@import 'tailwindcss';
+
 /* App.css - updated */
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
-}
-
-body {
-  overflow: hidden; /* Prevent body scrolling when using MainContent scrolling */
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* These classes are no longer needed with our new layout */
